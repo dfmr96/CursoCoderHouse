@@ -6,7 +6,7 @@ public class AnimationController : MonoBehaviour
 {
     [SerializeField] PlayerController player;
     [SerializeField] Animator anim;
-
+    
     private void Start()
     {
         anim = GetComponent<Animator>();

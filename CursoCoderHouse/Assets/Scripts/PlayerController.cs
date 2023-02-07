@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    
     [SerializeField] float speed;
     [SerializeField] float angularSpeed;
     [SerializeField] CharacterController player;
