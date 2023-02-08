@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] float speed;
     [SerializeField] float angularSpeed;
-    [SerializeField] float maxDistance;
+    [SerializeField] float distanceToStop;
     private void Update()
     {
         switch (state)
@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
                 break;
             case EnemyState.Moving:
                 RotateEnemy();
-                if (maxDistance > CheckDistance())
+                if (distanceToStop < CheckDistance())
                 {
                     MoveEnemy();
                 }

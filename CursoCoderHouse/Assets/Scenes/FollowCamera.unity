@@ -332,7 +332,7 @@ MonoBehaviour:
   player: {fileID: 1884974117}
   speed: 2
   angularSpeed: 10
-  maxDistance: 2
+  distanceToStop: 1
 --- !u!1 &1327191946
 GameObject:
   m_ObjectHideFlags: 0
