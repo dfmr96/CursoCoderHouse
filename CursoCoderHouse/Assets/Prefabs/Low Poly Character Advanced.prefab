@@ -696,7 +696,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: -3846018093981099296, guid: 24090a886821b424a928c1a1305435d6, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1008,7 +1008,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: -3846018093981099296, guid: 24090a886821b424a928c1a1305435d6, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1279,7 +1279,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: -3846018093981099296, guid: 24090a886821b424a928c1a1305435d6, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1550,7 +1550,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: -3846018093981099296, guid: 24090a886821b424a928c1a1305435d6, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2591,10 +2591,8 @@ GameObject:
   - component: {fileID: 8015507830062454624}
   - component: {fileID: 8015507830062454631}
   - component: {fileID: 7975541640912997057}
-  - component: {fileID: 1926631161791270312}
   - component: {fileID: 8733165878410261110}
   - component: {fileID: 5114228704106814451}
-  - component: {fileID: 5031783551610095121}
   - component: {fileID: 4815538433051308102}
   m_Layer: 0
   m_Name: Low Poly Character Advanced
@@ -2612,7 +2610,7 @@ Transform:
   m_GameObject: {fileID: 7239287137530301914}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.393, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1737928268782425396}
@@ -2682,14 +2680,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.53, z: 0}
---- !u!81 &1926631161791270312
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7239287137530301914}
-  m_Enabled: 1
 --- !u!82 &8733165878410261110
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2798,29 +2788,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47aed68099627245bf18572d6ccd155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  angularSpeed: 40
-  player: {fileID: 0}
+  speed: 3
+  angularSpeed: 100
+  player: {fileID: 7975541640912997057}
   playerAmmo: 3
   isRunning: 0
   isAiming: 0
   bulletPrefab: {fileID: 7312906341477366595, guid: 5905e5b7a9636644b9c8050835c5a0ae, type: 3}
   bulletSpawn: {fileID: 7975166686779486161}
   audioSource: {fileID: 0}
---- !u!114 &5031783551610095121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7239287137530301914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d2f96335e7bb78429a12cba037bcc4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camOne: {fileID: 0}
-  camTwo: {fileID: 0}
 --- !u!114 &4815538433051308102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2833,8 +2809,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d032226c5471848b60d68252b18fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  anim: {fileID: 0}
+  player: {fileID: 5114228704106814451}
+  anim: {fileID: 8015507830062454631}
 --- !u!1 &7381814788894120490
 GameObject:
   m_ObjectHideFlags: 0
@@ -3683,7 +3659,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: -3846018093981099296, guid: 24090a886821b424a928c1a1305435d6, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

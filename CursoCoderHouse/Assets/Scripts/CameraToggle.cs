@@ -2,30 +2,34 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class CameraToggle : MonoBehaviour
 {
-    [SerializeField] GameObject camOne;
-    [SerializeField] GameObject camTwo;
+    [SerializeField] CinemachineVirtualCamera cam;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        cam = transform.parent.gameObject.GetComponent<CinemachineVirtualCamera>();
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other.name + "ha entrado");
+        if (other.gameObject.CompareTag("Player"))
         {
-            ChangeCamera();
+            Debug.Log("Player ha entrado");
+            cam.enabled = true;
         }
     }
 
-    private void ChangeCamera()
+    private void OnTriggerExit(Collider other)
     {
-        if (camOne.activeInHierarchy)
+        Debug.Log(other.name + "ha salido");
+
+        if (other.gameObject.CompareTag("Player"))
         {
-            camOne.SetActive(false);
-            camTwo.SetActive(true);
-        } else
-        {
-            camOne.SetActive(true);
-            camTwo.SetActive(false);
+            Debug.Log("Player ha salido");
+            cam.enabled = false;
         }
     }
 }
