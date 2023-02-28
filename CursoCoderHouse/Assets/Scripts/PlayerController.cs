@@ -1,11 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+
+public enum PlayerState
+{
+    Idle,
+    Walking,
+    Running,
+    Aiming,
+    Interacting,
+    CheckingInventory
+}
 
 public class PlayerController : MonoBehaviour
 {
-    
+    [SerializeField] PlayerState state;
+    [SerializeField] float currentSpeed;
     [SerializeField] float speed;
+    [SerializeField] float runningSpeed;
     [SerializeField] float angularSpeed;
     [SerializeField] CharacterController player;
     [SerializeField] int playerAmmo;
@@ -18,40 +29,58 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        player = GetComponent < CharacterController>();
+        player = GetComponent<CharacterController>();
     }
     private void Update()
     {
+
         Movement();
         RotatePlayer();
         Aim();
     }
     void Movement()
     {
-        if (isAiming) return;
-        if(Input.GetKey(KeyCode.W))
+        if (state != PlayerState.Aiming)
         {
-            //Caminando hacia adelante
-            if (!AudioManager.sharedInstance.stepSound.isPlaying)
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
             {
-            AudioManager.sharedInstance.stepSound.Play();
+                state = PlayerState.Walking;
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    state = PlayerState.Running;
+                }
             }
-            player.Move(transform.forward * speed * Time.deltaTime);
-            isRunning = true;
-        } else if (Input.GetKey(KeyCode.S))
-        {
-            if (!AudioManager.sharedInstance.stepSound.isPlaying)
+            else 
             {
-                AudioManager.sharedInstance.stepSound.Play();
+                state = PlayerState.Idle;
             }
-            player.Move(-transform.forward * speed * Time.deltaTime);
-            isRunning = true;
-        } else
-        {
-            AudioManager.sharedInstance.stepSound.Stop();
-            isRunning = false;
         }
+        
+        switch (state)
+        {
+            case PlayerState.Idle:
+                AudioManager.sharedInstance.stepSound.Stop();
+                isRunning = false;
+                break;
+            case PlayerState.Walking:
+                if (!AudioManager.sharedInstance.stepSound.isPlaying) AudioManager.sharedInstance.stepSound.Play();
+                if (Input.GetKey(KeyCode.W)) currentSpeed = speed;
+                if (Input.GetKey(KeyCode.S)) currentSpeed = -speed;
+                player.Move(transform.forward * currentSpeed * Time.deltaTime);
+                isRunning = true;
+                break;
+            case PlayerState.Running:
+                if (!AudioManager.sharedInstance.stepSound.isPlaying) AudioManager.sharedInstance.stepSound.Play();
+                currentSpeed = runningSpeed;
+                player.Move(transform.forward * currentSpeed * Time.deltaTime);
+                isRunning = true;
+                break;
+            case PlayerState.Aiming:
+                isRunning = false;
+                if (Input.GetKeyDown(KeyCode.Space) && playerAmmo > 0) Shoot();
+                return;
 
+        }
     }
 
     void RotatePlayer()
@@ -72,20 +101,20 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftControl))
         {
+            state = PlayerState.Aiming;
             isAiming = true;
-        } else
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
+            state = PlayerState.Idle;
             isAiming = false;
         }
-
-        Shoot();
     }
 
     void Shoot()
     {
         if (!isAiming) return;
 
-        if (Input.GetKeyDown(KeyCode.Space) && playerAmmo > 0)
         {
             playerAmmo--;
             audioSource.Play();
