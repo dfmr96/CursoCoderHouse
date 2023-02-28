@@ -464,6 +464,26 @@ Transform:
   m_Father: {fileID: 799144817}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &190812979 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8411278643466907548, guid: 12c3b27739a675645b008cf62c40fe44, type: 3}
+  m_PrefabInstance: {fileID: 1599316864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &190812981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190812979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e87c8ba0d0890b4685be8450424531d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  batteryDuration: 3
+  currentBattery: 0
+  lightGO: {fileID: 1130080880}
 --- !u!1 &206014961
 GameObject:
   m_ObjectHideFlags: 0
@@ -2960,6 +2980,11 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &1130080880 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 266561957, guid: 12c3b27739a675645b008cf62c40fe44, type: 3}
+  m_PrefabInstance: {fileID: 1599316864}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1142188683
 GameObject:
   m_ObjectHideFlags: 0
@@ -3452,6 +3477,14 @@ PrefabInstance:
     - target: {fileID: 266561960, guid: 12c3b27739a675645b008cf62c40fe44, type: 3}
       propertyPath: m_Intensity
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5114228704106814451, guid: 12c3b27739a675645b008cf62c40fe44, type: 3}
+      propertyPath: runningSpeed
+      value: 3.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5114228704106814451, guid: 12c3b27739a675645b008cf62c40fe44, type: 3}
+      propertyPath: runningMultiplier
+      value: 1.15
       objectReference: {fileID: 0}
     - target: {fileID: 7239287137530301914, guid: 12c3b27739a675645b008cf62c40fe44, type: 3}
       propertyPath: m_Name
