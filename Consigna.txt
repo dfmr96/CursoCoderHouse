@@ -1,0 +1,10 @@
+LISTO Inputs del jugador-> Control tanque
+LISTO Materiales-> Cada modelo 3d tiene su textura
+LISTO Utilizacion de luces
+Objetos a instanciar-> 
+LISTO Temporizadores-> El arma y duracion de bateria
+Sistema de camaras -> Camaras fijas
+Calculos vectoriales-> Control tanque, posible zombi
+LISTO Caso de Switch-> Estado personaje con enum
+LISTO Colisiones-> 3 distintas separadas en layers
+LISTO Personajes con animaciones
