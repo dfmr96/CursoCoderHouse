@@ -12,6 +12,7 @@ public class Door : MonoBehaviour
 
     public void EnterToRoom(Collider col)
     {
+        AudioManager.sharedInstance.doorSound.Play();
         if (col ==roomCollider1)
         {
             player.transform.position = roomMovePoint1.transform.position;
