@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float angularSpeed;
     [SerializeField] CharacterController player;
     [SerializeField] int playerAmmo;
+    bool allowInteraction;
     public bool isRunning;
     public bool isAiming;
 
@@ -37,6 +38,11 @@ public class PlayerController : MonoBehaviour
         Movement();
         RotatePlayer();
         Aim();
+        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Interact();
+        }
     }
     void Movement()
     {
@@ -120,5 +126,24 @@ public class PlayerController : MonoBehaviour
             audioSource.Play();
             Instantiate(bulletPrefab, bulletSpawn.transform);
         }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.GetComponent<Door>() != null)
+        {
+            Debug.Log(other.name + "is triggered");
+            if (allowInteraction)
+            {
+                other.gameObject.GetComponent<Door>().EnterToRoom(other);
+                Debug.Log("E apretada");
+                allowInteraction= false;
+            }
+        }
+    }
+
+    public void Interact()
+    {
+        allowInteraction = true;
     }
 }
