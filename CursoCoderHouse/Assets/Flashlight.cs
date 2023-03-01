@@ -29,4 +29,9 @@ public class Flashlight : MonoBehaviour
             lightGO.SetActive(false);
         }
     }
+
+    private void TakeFlashlight()
+    {
+
+    }
 }

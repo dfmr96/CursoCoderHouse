@@ -20,17 +20,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float angularSpeed;
     [SerializeField] CharacterController player;
     [SerializeField] int playerAmmo;
-    bool allowInteraction;
+    [SerializeField] PlayerInventory inventory;
+    [SerializeField] bool allowInteraction;
+    [SerializeField] bool flashlightTaken;
     public bool isRunning;
     public bool isAiming;
 
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] GameObject bulletSpawn;
     [SerializeField] AudioSource audioSource;
+
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
         player = GetComponent<CharacterController>();
+        
     }
     private void Update()
     {
@@ -139,6 +143,12 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("E apretada");
                 allowInteraction= false;
             }
+        }
+
+        if (other.gameObject.GetComponent<Flashlight>() != null && !flashlightTaken && allowInteraction)
+        {
+            flashlightTaken= true;
+            inventory.TakeFlashlight();
         }
     }
 
