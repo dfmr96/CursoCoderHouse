@@ -2872,9 +2872,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8015507830062454624}
   - component: {fileID: 8015507830062454631}
+  - component: {fileID: 5114228704106814451}
   - component: {fileID: 7975541640912997057}
   - component: {fileID: 8733165878410261110}
-  - component: {fileID: 5114228704106814451}
   - component: {fileID: 4815538433051308102}
   - component: {fileID: 671687224}
   m_Layer: 0
@@ -2946,6 +2946,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &5114228704106814451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239287137530301914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47aed68099627245bf18572d6ccd155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  currentSpeed: 0
+  speed: 3
+  runningSpeed: 0
+  angularSpeed: 100
+  player: {fileID: 7975541640912997057}
+  playerAmmo: 3
+  inventory: {fileID: 0}
+  allowInteraction: 0
+  flashlightTaken: 0
+  interactionObject: {fileID: 0}
+  maxDistance: 0
+  isRunning: 0
+  isAiming: 0
+  bulletPrefab: {fileID: 7312906341477366595, guid: 5905e5b7a9636644b9c8050835c5a0ae, type: 3}
+  bulletSpawn: {fileID: 7975166686779486161}
+  audioSource: {fileID: 0}
 --- !u!143 &7975541640912997057
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3060,27 +3089,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5114228704106814451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7239287137530301914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b47aed68099627245bf18572d6ccd155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
-  angularSpeed: 100
-  player: {fileID: 7975541640912997057}
-  playerAmmo: 3
-  isRunning: 0
-  isAiming: 0
-  bulletPrefab: {fileID: 7312906341477366595, guid: 5905e5b7a9636644b9c8050835c5a0ae, type: 3}
-  bulletSpawn: {fileID: 7975166686779486161}
-  audioSource: {fileID: 0}
 --- !u!114 &4815538433051308102
 MonoBehaviour:
   m_ObjectHideFlags: 0

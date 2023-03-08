@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -23,6 +24,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerInventory inventory;
     [SerializeField] bool allowInteraction;
     [SerializeField] bool flashlightTaken;
+    [SerializeField] GameObject interactionObject;
+    [SerializeField] int maxDistance;
     public bool isRunning;
     public bool isAiming;
 
@@ -134,26 +137,55 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.GetComponent<Door>() != null)
-        {
-            Debug.Log(other.name + "is triggered");
-            if (allowInteraction)
-            {
-                other.gameObject.GetComponent<Door>().EnterToRoom(other);
-                Debug.Log("E apretada");
-                allowInteraction= false;
-            }
-        }
+        /* if (other.gameObject.GetComponent<Door>() != null)
+         {
+             Debug.Log(other.name + "is triggered");
+             if (allowInteraction)
+             {
+                 other.gameObject.GetComponent<Door>().EnterToRoom(other);
+                 Debug.Log("E apretada");
+                 allowInteraction= false;
+             }
+         }
 
-        if (other.gameObject.GetComponent<Flashlight>() != null && !flashlightTaken && allowInteraction)
-        {
-            flashlightTaken= true;
-            inventory.TakeFlashlight();
-        }
+         if (other.gameObject.GetComponent<Flashlight>() != null && !flashlightTaken && allowInteraction)
+         {
+
+         }*/
     }
 
     public void Interact()
     {
         allowInteraction = true;
+        Debug.Log("E apretado");
+        RaycastHit hit;
+
+        if (Physics.Raycast(interactionObject.transform.position, interactionObject.transform.forward, out hit, maxDistance))
+        {
+            Debug.Log("Ha golpeado" + hit.transform.name + hit.collider);
+            Debug.DrawRay(interactionObject.transform.position, interactionObject.transform.forward, Color.red, 0.5f);
+
+            if (hit.collider.gameObject.GetComponent<Flashlight>())
+            {
+                Debug.Log("Ha interactuado con la linterna");
+                flashlightTaken = true;
+                inventory.TakeFlashlight();
+            }
+
+            if (hit.collider.gameObject.GetComponent<Door>() != null)
+            {
+                if (allowInteraction)
+                {
+                    hit.collider.gameObject.GetComponent<Door>().EnterToRoom(hit.collider);
+                    Debug.Log("E apretada");
+                    allowInteraction = false;
+                }
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(interactionObject.transform.position, interactionObject.transform.forward);
     }
 }
