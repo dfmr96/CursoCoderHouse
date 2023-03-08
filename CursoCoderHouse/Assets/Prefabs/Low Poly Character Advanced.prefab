@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266561957}
   m_LocalRotation: {x: 0.08715578, y: -0, z: -0, w: 0.9961947}
-  m_LocalPosition: {x: 0, y: 3.63, z: 0.16}
+  m_LocalPosition: {x: 0, y: 3.58, z: 0.34}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,13 +45,13 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 8
+  m_Intensity: 3
+  m_Range: 12
   m_SpotAngle: 90
   m_InnerSpotAngle: 0
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -115,6 +115,37 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &2134111972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2134111973}
+  m_Layer: 0
+  m_Name: InteractionObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2134111973
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134111972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.299, z: 0.295}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8015507830062454624}
+  m_RootOrder: 27
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &66005300705523914
 GameObject:
   m_ObjectHideFlags: 0
@@ -2873,10 +2904,10 @@ GameObject:
   - component: {fileID: 8015507830062454624}
   - component: {fileID: 8015507830062454631}
   - component: {fileID: 5114228704106814451}
+  - component: {fileID: 161679430}
   - component: {fileID: 7975541640912997057}
   - component: {fileID: 8733165878410261110}
   - component: {fileID: 4815538433051308102}
-  - component: {fileID: 671687224}
   m_Layer: 0
   m_Name: Low Poly Character Advanced
   m_TagString: Player
@@ -2923,6 +2954,7 @@ Transform:
   - {fileID: 3572237751623343876}
   - {fileID: 7828945358358657996}
   - {fileID: 9219165237051979046}
+  - {fileID: 2134111973}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2961,20 +2993,34 @@ MonoBehaviour:
   state: 0
   currentSpeed: 0
   speed: 3
-  runningSpeed: 0
+  runningSpeed: 3.3
   angularSpeed: 100
   player: {fileID: 7975541640912997057}
   playerAmmo: 3
-  inventory: {fileID: 0}
+  inventory: {fileID: 161679430}
   allowInteraction: 0
   flashlightTaken: 0
-  interactionObject: {fileID: 0}
-  maxDistance: 0
+  interactionObject: {fileID: 2134111972}
+  maxDistance: 3
   isRunning: 0
   isAiming: 0
   bulletPrefab: {fileID: 7312906341477366595, guid: 5905e5b7a9636644b9c8050835c5a0ae, type: 3}
   bulletSpawn: {fileID: 7975166686779486161}
   audioSource: {fileID: 0}
+--- !u!114 &161679430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239287137530301914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b7bd7c77fde3344a38d8bdc472ad78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashlight: {fileID: 0}
+  flashlightOnPlayer: {fileID: 8411278643466907548}
 --- !u!143 &7975541640912997057
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2988,11 +3034,11 @@ CharacterController:
   serializedVersion: 2
   m_Height: 2.4
   m_Radius: 0.5
-  m_SlopeLimit: 45
+  m_SlopeLimit: 0
   m_StepOffset: 0
   m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.53, z: 0}
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 1.22, z: 0}
 --- !u!82 &8733165878410261110
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3103,22 +3149,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 5114228704106814451}
   anim: {fileID: 8015507830062454631}
---- !u!54 &671687224
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7239287137530301914}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!1 &7381814788894120490
 GameObject:
   m_ObjectHideFlags: 0
@@ -3739,13 +3769,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9219165237051979046}
+  - component: {fileID: 190812981}
   m_Layer: 0
   m_Name: LP_Old_Flashlight.obj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9219165237051979046
 Transform:
   m_ObjectHideFlags: 0
@@ -3763,6 +3794,21 @@ Transform:
   m_Father: {fileID: 8015507830062454624}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &190812981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8411278643466907548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e87c8ba0d0890b4685be8450424531d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  batteryDuration: 90
+  currentBattery: 0
+  lightGO: {fileID: 266561957}
 --- !u!1 &8670137447789485503
 GameObject:
   m_ObjectHideFlags: 0

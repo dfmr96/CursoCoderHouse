@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Flashlight : MonoBehaviour
+public class Flashlight : MonoBehaviour, IInteractable
 {
     public float batteryDuration;
     public float currentBattery;
     [SerializeField] GameObject lightGO;
+    [SerializeField] PlayerInventory inventory;
+
 
     private void Start()
     {
@@ -30,8 +32,10 @@ public class Flashlight : MonoBehaviour
         }
     }
 
-    private void TakeFlashlight()
-    {
 
+    public void Interact()
+    {
+        Debug.Log("Ha interactuado con la linterna");
+        inventory.TakeFlashlight();
     }
 }

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TextTrigger : MonoBehaviour
 {
-    [SerializeField] string text;
+    public string text;
     [SerializeField] TextGenerator textGenerator;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))  textGenerator.ShowMsg(text);
+      //  if (other.gameObject.CompareTag("Player"))  textGenerator.ShowMsg(text);
     }
 }

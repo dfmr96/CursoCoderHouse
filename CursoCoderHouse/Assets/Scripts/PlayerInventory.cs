@@ -6,6 +6,7 @@ public class PlayerInventory : MonoBehaviour
 {
     public GameObject flashlight;
     public GameObject flashlightOnPlayer;
+    public GameObject[] items;
 
     public void TakeFlashlight()
     {

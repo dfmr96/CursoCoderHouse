@@ -1,6 +1,4 @@
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public enum PlayerState
 {
@@ -21,9 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float angularSpeed;
     [SerializeField] CharacterController player;
     [SerializeField] int playerAmmo;
-    [SerializeField] PlayerInventory inventory;
     [SerializeField] bool allowInteraction;
-    [SerializeField] bool flashlightTaken;
     [SerializeField] GameObject interactionObject;
     [SerializeField] int maxDistance;
     public bool isRunning;
@@ -37,7 +33,7 @@ public class PlayerController : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         player = GetComponent<CharacterController>();
-        
+
     }
     private void Update()
     {
@@ -45,7 +41,7 @@ public class PlayerController : MonoBehaviour
         Movement();
         RotatePlayer();
         Aim();
-        
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             Interact();
@@ -63,12 +59,12 @@ public class PlayerController : MonoBehaviour
                     state = PlayerState.Running;
                 }
             }
-            else 
+            else
             {
                 state = PlayerState.Idle;
             }
         }
-        
+
         switch (state)
         {
             case PlayerState.Idle:
@@ -135,25 +131,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        /* if (other.gameObject.GetComponent<Door>() != null)
-         {
-             Debug.Log(other.name + "is triggered");
-             if (allowInteraction)
-             {
-                 other.gameObject.GetComponent<Door>().EnterToRoom(other);
-                 Debug.Log("E apretada");
-                 allowInteraction= false;
-             }
-         }
-
-         if (other.gameObject.GetComponent<Flashlight>() != null && !flashlightTaken && allowInteraction)
-         {
-
-         }*/
-    }
-
     public void Interact()
     {
         allowInteraction = true;
@@ -164,22 +141,12 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Ha golpeado" + hit.transform.name + hit.collider);
             Debug.DrawRay(interactionObject.transform.position, interactionObject.transform.forward, Color.red, 0.5f);
-
-            if (hit.collider.gameObject.GetComponent<Flashlight>())
+            var interactable = hit.collider.gameObject.GetComponent<IInteractable>();
+            if (interactable == null) return;
+            if (allowInteraction)
             {
-                Debug.Log("Ha interactuado con la linterna");
-                flashlightTaken = true;
-                inventory.TakeFlashlight();
-            }
-
-            if (hit.collider.gameObject.GetComponent<Door>() != null)
-            {
-                if (allowInteraction)
-                {
-                    hit.collider.gameObject.GetComponent<Door>().EnterToRoom(hit.collider);
-                    Debug.Log("E apretada");
-                    allowInteraction = false;
-                }
+                interactable.Interact();
+                allowInteraction = false;
             }
         }
     }
@@ -189,3 +156,4 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawRay(interactionObject.transform.position, interactionObject.transform.forward);
     }
 }
+

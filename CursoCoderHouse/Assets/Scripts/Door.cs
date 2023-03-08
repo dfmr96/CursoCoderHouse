@@ -2,24 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class Door : MonoBehaviour, IInteractable
 {
     [SerializeField] GameObject player;
     [SerializeField] GameObject roomMovePoint1;
     [SerializeField] GameObject roomMovePoint2;
     [SerializeField] Collider roomCollider1;
     [SerializeField] Collider roomCollider2;
+    bool isPlayerInside;
 
-    public void EnterToRoom(Collider col)
+    public void EnterToRoom()
     {
         AudioManager.sharedInstance.doorSound.Play();
-        if (col ==roomCollider1)
+        if (!isPlayerInside)
         {
             player.transform.position = roomMovePoint1.transform.position;
+            isPlayerInside = true;
         }
-        if (col == roomCollider2)
+        else
         {
+            isPlayerInside = false;
             player.transform.position = roomMovePoint2.transform.position;
         }
+    }
+
+    public void Interact()
+    {
+        EnterToRoom();
     }
 }
