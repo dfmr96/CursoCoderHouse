@@ -6,7 +6,7 @@ public class Note : MonoBehaviour, IInteractable
 {
     [SerializeField] TextTrigger trigger;
     [SerializeField] TextGenerator generator;
-    public void Interact()
+    public void Interact(ItemData item)
     {
         generator.ShowMsg(trigger.text);
     }

@@ -33,12 +33,15 @@ public class PlayerController : MonoBehaviour
     {
         EventBus.Instance.onOpenInventory += () => state = PlayerState.CheckingInventory;
         EventBus.Instance.onCloseInventory += () => state = PlayerState.Idle;
+        EventBus.Instance.onItemUsed += Interact;
     }
 
     private void OnDisable()
     {
         EventBus.Instance.onOpenInventory -= () => state = PlayerState.CheckingInventory;
         EventBus.Instance.onCloseInventory -= () => state = PlayerState.Idle;
+        EventBus.Instance.onItemUsed -= Interact;
+
     }
     private void Start()
     {
@@ -52,9 +55,9 @@ public class PlayerController : MonoBehaviour
         Movement();
         Aim();
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && state != PlayerState.CheckingInventory)
         {
-            Interact();
+            Interact(null);
         }
     }
     private void Movement()
@@ -144,7 +147,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Interact()
+    public void Interact(ItemData item)
     {
         allowInteraction = true;
         Debug.Log("E apretado");
@@ -158,7 +161,7 @@ public class PlayerController : MonoBehaviour
             if (interactable == null) return;
             if (allowInteraction)
             {
-                interactable.Interact();
+                interactable.Interact(item);
                 allowInteraction = false;
             }
         }

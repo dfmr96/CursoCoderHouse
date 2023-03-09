@@ -33,7 +33,7 @@ public class Flashlight : MonoBehaviour, IInteractable
     }
 
 
-    public void Interact()
+    public void Interact(ItemData item)
     {
         Debug.Log("Ha interactuado con la linterna");
         inventory.TakeFlashlight();

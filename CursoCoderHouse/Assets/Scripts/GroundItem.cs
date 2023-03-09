@@ -7,7 +7,7 @@ public class GroundItem : MonoBehaviour, IInteractable
     [SerializeField] private ItemData _itemData;
    // public InventoryObject inventory;
 
-    public void Interact()
+    public void Interact(ItemData item)
     {
         EventBus.Instance.PickUpItem(_itemData);
         Destroy(gameObject);

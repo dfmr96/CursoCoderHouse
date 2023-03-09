@@ -10,5 +10,5 @@ public enum InteractableType
 }
 public interface IInteractable
 {
-    void Interact();
+    void Interact(ItemData item);
 }

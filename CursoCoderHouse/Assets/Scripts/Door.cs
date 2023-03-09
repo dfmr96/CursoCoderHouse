@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : MonoBehaviour, IInteractable
@@ -9,8 +7,9 @@ public class Door : MonoBehaviour, IInteractable
     [SerializeField] GameObject roomMovePoint2;
     [SerializeField] Collider roomCollider1;
     [SerializeField] Collider roomCollider2;
+    [SerializeField] ItemData _requiredItem;
+    [SerializeField] bool isLocked;
     bool isPlayerInside;
-
     public void EnterToRoom()
     {
         AudioManager.sharedInstance.doorSound.Play();
@@ -26,8 +25,16 @@ public class Door : MonoBehaviour, IInteractable
         }
     }
 
-    public void Interact()
+    public void Interact(ItemData item)
     {
-        EnterToRoom();
+        if (_requiredItem == item) 
+        { 
+            isLocked = false;
+        } else
+        {
+            Debug.Log("Puerta cerrada");
+        }
+
+        if (!isLocked) EnterToRoom();
     }
 }

@@ -44,7 +44,6 @@ GameObject:
   - component: {fileID: 824536202630577042}
   - component: {fileID: 824536202630577041}
   - component: {fileID: 824536202630577054}
-  - component: {fileID: 824536202630577055}
   m_Layer: 0
   m_Name: SM_Door_low (1)
   m_TagString: Untagged
@@ -135,7 +134,8 @@ MonoBehaviour:
   roomMovePoint1: {fileID: 824536202697871038}
   roomMovePoint2: {fileID: 824536202096593387}
   roomCollider1: {fileID: 824536202630577054}
-  roomCollider2: {fileID: 824536202630577055}
+  roomCollider2: {fileID: 0}
+  _requiredItem: {fileID: 0}
 --- !u!65 &824536202630577054
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -149,19 +149,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.001, y: 0.011257541, z: 0.02324258}
   m_Center: {x: -0.0005, y: -0.0000000016298147, z: 0.000511156}
---- !u!65 &824536202630577055
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 824536202630577045}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.001, y: 0.011257541, z: 0.02324258}
-  m_Center: {x: 0.0005, y: -0.0000000016298147, z: 0.000511156}
 --- !u!1 &824536202697871038
 GameObject:
   m_ObjectHideFlags: 0
