@@ -6,8 +6,14 @@ using UnityEngine.UI;
 
 public class ScreenFader : MonoBehaviour
 {
+    public static ScreenFader Instance { get; private set; }
     private Image _fader;
     private bool _isBusy;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         _fader = GetComponent<Image>();

@@ -74,8 +74,16 @@ public class InventoryViewController : MonoBehaviour
 
     public void UseItem()
     {
-        EventBus.Instance.UseItem(_selectedSlot.itemData);
+        _screenFader.FadeToBlack(1f, FadeToUseItemCallback);
         Debug.Log("Data pasada al evento con " + _selectedSlot.itemData.Name);
+    }
+
+    public void FadeToUseItemCallback()
+    {
+        _contextMenuObject.SetActive(false);
+        _inventoryViewObject.SetActive(false);
+        _screenFader.FadeFromBlack(1f, () => EventBus.Instance.UseItem(_selectedSlot.itemData));
+        _state = State.MenuClosed;
     }
 
     private void Update()
