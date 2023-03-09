@@ -29,6 +29,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject bulletSpawn;
     [SerializeField] AudioSource audioSource;
 
+    private void OnEnable()
+    {
+        EventBus.Instance.onOpenInventory += () => state = PlayerState.CheckingInventory;
+        EventBus.Instance.onCloseInventory += () => state = PlayerState.Idle;
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Instance.onOpenInventory -= () => state = PlayerState.CheckingInventory;
+        EventBus.Instance.onCloseInventory -= () => state = PlayerState.Idle;
+    }
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -39,7 +50,6 @@ public class PlayerController : MonoBehaviour
     {
 
         Movement();
-        RotatePlayer();
         Aim();
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -47,23 +57,24 @@ public class PlayerController : MonoBehaviour
             Interact();
         }
     }
-    void Movement()
+    private void Movement()
     {
-        if (state != PlayerState.Aiming)
+        if (state == PlayerState.Aiming || state == PlayerState.CheckingInventory) return;
+
+        RotatePlayer();
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
         {
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            state = PlayerState.Walking;
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                state = PlayerState.Walking;
-                if (Input.GetKey(KeyCode.LeftShift))
-                {
-                    state = PlayerState.Running;
-                }
-            }
-            else
-            {
-                state = PlayerState.Idle;
+                state = PlayerState.Running;
             }
         }
+        else
+        {
+            state = PlayerState.Idle;
+        }
+
 
         switch (state)
         {
@@ -88,11 +99,13 @@ public class PlayerController : MonoBehaviour
                 isRunning = false;
                 if (Input.GetKeyDown(KeyCode.Space) && playerAmmo > 0) Shoot();
                 return;
+            case PlayerState.CheckingInventory:
+                break;
 
         }
     }
 
-    void RotatePlayer()
+    private void RotatePlayer()
     {
         Vector3 rotateVector = new Vector3(0, 1, 0);
         if (Input.GetKey(KeyCode.A))
@@ -120,7 +133,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Shoot()
+    private void Shoot()
     {
         if (!isAiming) return;
 

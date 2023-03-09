@@ -9,6 +9,8 @@ public class TextTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-      //  if (other.gameObject.CompareTag("Player"))  textGenerator.ShowMsg(text);
+      //
+      //
+      //if (other.gameObject.CompareTag("Player"))  textGenerator.ShowMsg(text);
     }
 }
