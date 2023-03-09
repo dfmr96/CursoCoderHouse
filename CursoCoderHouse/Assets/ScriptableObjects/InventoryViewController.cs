@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,6 +11,8 @@ public class InventoryViewController : MonoBehaviour
     [SerializeField] private PlayerController _playerController;
 
     [SerializeField] private List<ItemSlot> _slots;
+
+    [SerializeField] private ScreenFader _screenFader;
 
     private void OnEnable()
     {
@@ -54,14 +54,21 @@ public class InventoryViewController : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Tab))
         {
-            if (_inventoryViewObject.activeSelf)
+
+            _screenFader.FadeToBlack(0.25f, () =>
             {
-                EventBus.Instance.CloseInventory();
-            } else
-            {
-                EventBus.Instance.OpenInventory();
-            }
-            _inventoryViewObject.SetActive(!_inventoryViewObject.activeSelf);
+                if (_inventoryViewObject.activeSelf)
+                {
+                    Debug.Log("true");
+                    EventBus.Instance.CloseInventory();
+                }
+                else
+                {
+                    EventBus.Instance.OpenInventory();
+                }
+                _inventoryViewObject.SetActive(!_inventoryViewObject.activeSelf);
+                _screenFader.FadeFromBlack(0.25f, null);
+            });
         }
     }
 }

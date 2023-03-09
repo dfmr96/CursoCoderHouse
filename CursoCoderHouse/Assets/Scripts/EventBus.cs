@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EventBus : MonoBehaviour
@@ -13,7 +11,14 @@ public class EventBus : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(Instance);
+        }
     }
 
     public void OpenInventory()
@@ -21,7 +26,7 @@ public class EventBus : MonoBehaviour
         onOpenInventory?.Invoke();
     }
 
-    public void CloseInventory() 
+    public void CloseInventory()
     {
         onCloseInventory?.Invoke();
     }
