@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     private GameLoop gameState;
-    private MainMenu mainMenuState;
+    [SerializeField] MainMenu mainMenuState;
     private UIViewController mainMenuViewController;
 
     private void Awake()
@@ -51,18 +51,35 @@ public class GameManager : MonoBehaviour
             }
         }
         else if (mainMenuState == MainMenu.Menu)
+        {
+
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                mainMenuState = MainMenu.Menu;
+                //mainMenuState = MainMenu.PressStart;
             }
-            else if (mainMenuState == MainMenu.NewGame)
-            {
 
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                mainMenuState = MainMenu.NewGame;
             }
         }
+        else if (mainMenuState == MainMenu.NewGame)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ReturnToMainMenu();
+            }
+        }
+    }
     public void HidePressStart()
     {
         mainMenuViewController.HidePressStart();
+        mainMenuState = MainMenu.Menu;
+    }
+
+    public void ReturnToMainMenu()
+    {
+        mainMenuViewController.ReturnToMainMenu();
         mainMenuState = MainMenu.Menu;
     }
 }
