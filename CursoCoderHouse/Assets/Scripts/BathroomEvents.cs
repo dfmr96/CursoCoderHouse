@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BathroomEvents : MonoBehaviour
 {
     [SerializeField] GameObject bathroomLight;
     [SerializeField] Collider eventTrigger;
+    [SerializeField] UnityEvent OnSecuenceStart;
+
+    private void Start()
+    {
+        OnSecuenceStart.AddListener(SecuenceHandler);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,6 +24,11 @@ public class BathroomEvents : MonoBehaviour
     public void BeginSecuence()
     {
         StartCoroutine(bathroomSecuence());
+    }
+
+    public void SecuenceHandler()
+    {
+        Debug.Log("Secuencia iniciada");
     }
 
     public IEnumerator bathroomSecuence()

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EventBus : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class EventBus : MonoBehaviour
     public event Action<ItemData> onItemUsed;
     
     public event Action<ItemData> onItemPickUp;
+
+    public UnityEvent onDoorClosed;
 
 
     private void Awake()
@@ -55,5 +58,11 @@ public class EventBus : MonoBehaviour
     {
         onItemUsed?.Invoke(item);
         Debug.Log("Evento accionado con" + item.Name);
+    }
+
+    public void DoorLocked()
+    {
+        onDoorClosed?.Invoke();
+        Debug.Log("Puerta Cerrada");
     }
 }

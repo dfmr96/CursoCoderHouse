@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameLoop
 {
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    private GameLoop gameState;
+    public GameLoop gameState;
     [SerializeField] MainMenu mainMenuState;
     private UIViewController mainMenuViewController;
 

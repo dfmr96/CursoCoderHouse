@@ -10,7 +10,18 @@ public class AudioManager : MonoBehaviour
     public AudioSource doorSound;
     public AudioSource retreteSound;
     public AudioSource clickSound;
+    public AudioSource doorLockedSound;
     // Start is called before the first frame update
+    private void OnEnable()
+    {
+        EventBus.Instance.onDoorClosed.AddListener(PlayDoorLocked);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Instance.onDoorClosed.RemoveListener(PlayDoorLocked);
+    }
+
     void Start()
     {
         if (sharedInstance == null)
@@ -22,5 +33,8 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
+    public void PlayDoorLocked()
+    {
+        doorLockedSound.Play();
+    }
 }

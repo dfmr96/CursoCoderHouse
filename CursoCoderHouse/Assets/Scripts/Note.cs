@@ -8,6 +8,6 @@ public class Note : MonoBehaviour, IInteractable
     [SerializeField] TextGenerator generator;
     public void Interact(ItemData item)
     {
-        generator.ShowMsg(trigger.text);
+        generator.ShowMsg(trigger.text, 2f);
     }
 }

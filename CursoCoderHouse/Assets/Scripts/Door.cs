@@ -27,14 +27,18 @@ public class Door : MonoBehaviour, IInteractable
 
     public void Interact(ItemData item)
     {
-        if (_requiredItem == item) 
-        { 
-            isLocked = false;
-        } else
+        if (_requiredItem == item)
         {
-            Debug.Log("Puerta cerrada");
+            isLocked = false;
         }
 
-        if (!isLocked) EnterToRoom();
+        if (!isLocked)
+        {
+            EnterToRoom();
+        }
+        else
+        {
+            EventBus.Instance.DoorLocked();
+        }
     }
 }

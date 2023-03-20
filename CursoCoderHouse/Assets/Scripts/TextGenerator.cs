@@ -7,23 +7,39 @@ public class TextGenerator : MonoBehaviour
 {
     [SerializeField] GameObject text;
     [SerializeField] string[] textMsg;
-    private void Start()
+
+    private void OnEnable()
     {
-        StartCoroutine(PrintMsg(textMsg[0]));
+        EventBus.Instance.onDoorClosed.AddListener(DoorClosed);
     }
 
-    public IEnumerator PrintMsg(string msg)
+    private void OnDisable()
+    {
+        EventBus.Instance.onDoorClosed.RemoveListener(DoorClosed);
+
+    }
+    private void Start()
+    {
+        StartCoroutine(PrintMsg(textMsg[0],2));
+    }
+
+    public IEnumerator PrintMsg(string msg, float delay)
     {
         text.SetActive(true);
         text.GetComponent<TMP_Text>().text = msg;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(delay);
         text.GetComponent<TMP_Text>().text = "";
 
         text.SetActive(false);
     }
 
-    public void ShowMsg(string msg)
+    public void ShowMsg(string msg, float delay)
     {
-        StartCoroutine(PrintMsg(msg));
+        StartCoroutine(PrintMsg(msg, delay));
+    }
+
+    public void DoorClosed()
+    {
+        ShowMsg(textMsg[1], 1f);
     }
 }

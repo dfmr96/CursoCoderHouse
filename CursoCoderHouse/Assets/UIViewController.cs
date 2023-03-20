@@ -75,6 +75,7 @@ public class UIViewController : MonoBehaviour
     {
         PlayAudio(audioBGMSource, bgm[2]);
         yield return new WaitForSeconds(3f);
+        GameManager.instance.gameState = GameLoop.Gameplay;
         SceneManager.LoadScene(1);
     }
 }
