@@ -86,6 +86,7 @@ public class InventoryViewController : MonoBehaviour
         ));
         noBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
         {
+            promptPanel.SetActive(false);
             yesBtn.onClick.RemoveAllListeners();
             noBtn.onClick.RemoveAllListeners();
             EventBus.Instance.CloseInventory();
@@ -160,14 +161,6 @@ public class InventoryViewController : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(_selectedSlot.gameObject);
                 _contextMenuObject.SetActive(false);
                 _state = State.Items;
-            }
-        }
-
-        if (_state == State.ItemPickUpPrompt)
-        {
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                EventBus.Instance.CloseInventory();
             }
         }
     }
