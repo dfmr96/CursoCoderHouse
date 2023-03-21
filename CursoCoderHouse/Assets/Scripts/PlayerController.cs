@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
                 interactable.Interact(item);
                 allowInteraction = false;
             }
-            state = PlayerState.Idle;
+            //state = PlayerState.Idle;
         }
     }
 

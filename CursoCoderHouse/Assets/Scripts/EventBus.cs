@@ -13,6 +13,8 @@ public class EventBus : MonoBehaviour
     public event Action<ItemData> onItemUsed;
     
     public event Action<ItemData> onItemPickUp;
+    public event Action onItemPicked;
+    public event Action<ItemData, Action, Action> onPickUpPrompt;
 
     public UnityEvent onDoorClosed;
 
@@ -54,6 +56,11 @@ public class EventBus : MonoBehaviour
         onItemPickUp?.Invoke(item);
     }
 
+    public void ItemPicked()
+    {
+        onItemPicked?.Invoke();
+    }
+
     public void UseItem(ItemData item)
     {
         onItemUsed?.Invoke(item);
@@ -64,5 +71,12 @@ public class EventBus : MonoBehaviour
     {
         onDoorClosed?.Invoke();
         Debug.Log("Puerta Cerrada");
+    }
+
+    public void PickUpPrompt(ItemData item, Action yesAction, Action noAction)
+    {
+        onOpenInventory?.Invoke();
+        onPickUpPrompt?.Invoke(item, yesAction, noAction);
+        Debug.Log("PickUpPromt llamado");
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class InventoryViewController : MonoBehaviour
 {
@@ -21,10 +22,18 @@ public class InventoryViewController : MonoBehaviour
 
     [SerializeField] private List<GameObject> _contextMenuIgnore;
 
+    [SerializeField] GameObject promptPanel;
+    [SerializeField] TMP_Text promptText;
+    [SerializeField] Button yesBtn;
+    [SerializeField] Button noBtn;
+
+    public static GameObject lastInteracted;
+
     private enum State
     {
         Items,
         ContextMenu,
+        ItemPickUpPrompt,
         MenuBar,
         MenuClosed
     }
@@ -40,23 +49,49 @@ public class InventoryViewController : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Instance.onItemPickUp += OnItemPickedUp;
+        EventBus.Instance.onOpenInventory += OpenInventory;
+        EventBus.Instance.onCloseInventory += CloseInventory;
     }
 
     private void OnDisable()
     {
         EventBus.Instance.onItemPickUp -= OnItemPickedUp;
+        EventBus.Instance.onOpenInventory -= OpenInventory;
+        EventBus.Instance.onCloseInventory -= CloseInventory;
     }
 
     private void OnItemPickedUp(ItemData itemData)
     {
-        foreach (var slot in _slots)
+        EventBus.Instance.OpenInventory();
+        promptPanel.SetActive(true);
+        _state = State.ItemPickUpPrompt;
+        EventSystem.current.SetSelectedGameObject(yesBtn.gameObject);
+        promptText.SetText($"Do you want to take {itemData.Name}?");
+        yesBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
         {
-            if (slot.isEmpty())
+            foreach (var slot in _slots)
             {
-                slot.itemData = itemData;
-                break;
+                if (slot.isEmpty())
+                {
+                    slot.itemData = itemData;
+                    break;
+                }
             }
+            yesBtn.onClick.RemoveAllListeners();
+            noBtn.onClick.RemoveAllListeners();
+            promptPanel.SetActive(false);
+            Destroy(lastInteracted);
+            EventBus.Instance.CloseInventory();
         }
+        ));
+        noBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
+        {
+            yesBtn.onClick.RemoveAllListeners();
+            noBtn.onClick.RemoveAllListeners();
+            EventBus.Instance.CloseInventory();
+        }
+        ));
+
     }
 
     public void OnSlotSelected(ItemSlot selectedSlot)
@@ -96,9 +131,6 @@ public class InventoryViewController : MonoBehaviour
                 _screenFader.FadeToBlack(0.25f, () =>
                 {
                     EventBus.Instance.OpenInventory();
-                    _inventoryViewObject.gameObject.SetActive(true);
-                    _screenFader.FadeFromBlack(0.25f, null);
-                    EventSystem.current.SetSelectedGameObject(_defaultSlot);
                     _state = State.Items;
                 });
             }
@@ -107,9 +139,6 @@ public class InventoryViewController : MonoBehaviour
                 _screenFader.FadeToBlack(0.25f, () =>
                 {
                     EventBus.Instance.CloseInventory();
-                    _inventoryViewObject.gameObject.SetActive(false);
-                    _screenFader.FadeFromBlack(0.25f, null);
-                    _state = State.MenuClosed;
                 });
             }
 
@@ -133,5 +162,28 @@ public class InventoryViewController : MonoBehaviour
                 _state = State.Items;
             }
         }
+
+        if (_state == State.ItemPickUpPrompt)
+        {
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                EventBus.Instance.CloseInventory();
+            }
+        }
+    }
+
+    public void OpenInventory()
+    {
+        _inventoryViewObject.gameObject.SetActive(true);
+        _screenFader.FadeFromBlack(0.25f, null);
+        EventSystem.current.SetSelectedGameObject(_defaultSlot);
+        //_state = State.Items;
+    }
+
+    public void CloseInventory()
+    {
+        _inventoryViewObject.gameObject.SetActive(false);
+        _screenFader.FadeFromBlack(0.25f, null);
+        _state = State.MenuClosed;
     }
 }
