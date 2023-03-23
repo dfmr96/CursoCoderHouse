@@ -22,10 +22,10 @@ public class InventoryViewController : MonoBehaviour
 
     [SerializeField] private List<GameObject> _contextMenuIgnore;
 
-    [SerializeField] GameObject promptPanel;
-    [SerializeField] TMP_Text promptText;
-    [SerializeField] Button yesBtn;
-    [SerializeField] Button noBtn;
+    [SerializeField] private GameObject _promptPanel;
+    [SerializeField] private TMP_Text _promptText;
+    [SerializeField] private Button _yesBtn;
+    [SerializeField] private Button _noBtn;
 
     public static GameObject lastInteracted;
 
@@ -51,6 +51,9 @@ public class InventoryViewController : MonoBehaviour
         EventBus.Instance.onItemPickUp += OnItemPickedUp;
         EventBus.Instance.onOpenInventory += OpenInventory;
         EventBus.Instance.onCloseInventory += CloseInventory;
+
+        _itemNameText.SetText(_selectedSlot.itemData.Name);
+        _itemDescriptionText.SetText(_selectedSlot.itemData.Descripton[0]);
     }
 
     private void OnDisable()
@@ -63,11 +66,11 @@ public class InventoryViewController : MonoBehaviour
     private void OnItemPickedUp(ItemData itemData)
     {
         EventBus.Instance.OpenInventory();
-        promptPanel.SetActive(true);
+        _promptPanel.SetActive(true);
         _state = State.ItemPickUpPrompt;
-        EventSystem.current.SetSelectedGameObject(yesBtn.gameObject);
-        promptText.SetText($"Do you want to take {itemData.Name}?");
-        yesBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
+        EventSystem.current.SetSelectedGameObject(_yesBtn.gameObject);
+        _promptText.SetText($"Do you want to take {itemData.Name}?");
+        _yesBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
         {
             foreach (var slot in _slots)
             {
@@ -77,18 +80,18 @@ public class InventoryViewController : MonoBehaviour
                     break;
                 }
             }
-            yesBtn.onClick.RemoveAllListeners();
-            noBtn.onClick.RemoveAllListeners();
-            promptPanel.SetActive(false);
+            _yesBtn.onClick.RemoveAllListeners();
+            _noBtn.onClick.RemoveAllListeners();
+            _promptPanel.SetActive(false);
             Destroy(lastInteracted);
             EventBus.Instance.CloseInventory();
         }
         ));
-        noBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
+        _noBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
         {
-            promptPanel.SetActive(false);
-            yesBtn.onClick.RemoveAllListeners();
-            noBtn.onClick.RemoveAllListeners();
+            _promptPanel.SetActive(false);
+            _yesBtn.onClick.RemoveAllListeners();
+            _noBtn.onClick.RemoveAllListeners();
             EventBus.Instance.CloseInventory();
         }
         ));
@@ -118,7 +121,9 @@ public class InventoryViewController : MonoBehaviour
     {
         _contextMenuObject.SetActive(false);
         _inventoryViewObject.SetActive(false);
+        //EventBus.Instance.UseItem(_selectedSlot.itemData);
         _screenFader.FadeFromBlack(1f, () => EventBus.Instance.UseItem(_selectedSlot.itemData));
+        EventBus.Instance.CloseInventory();
         _state = State.MenuClosed;
     }
 

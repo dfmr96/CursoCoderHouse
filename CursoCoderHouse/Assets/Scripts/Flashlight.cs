@@ -12,16 +12,16 @@ public class Flashlight : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        currentBattery = batteryDuration;
+        //currentBattery = batteryDuration;
     }
 
     private void Update()
     {
-        if (currentBattery > 0)
-        {
-        currentBattery -= Time.deltaTime;
-        }
-        CheckBattery();
+        //if (currentBattery > 0)
+        //{
+        //currentBattery -= Time.deltaTime;
+        //}
+        //CheckBattery();
     }
 
     public void CheckBattery()

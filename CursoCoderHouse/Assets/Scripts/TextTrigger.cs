@@ -11,6 +11,6 @@ public class TextTrigger : MonoBehaviour
     {
       //
       //
-      //if (other.gameObject.CompareTag("Player"))  textGenerator.ShowMsg(text);
+      if (other.gameObject.CompareTag("Player"))  textGenerator.ShowMsg(text, 0f);
     }
 }

@@ -5,8 +5,9 @@ using TMPro;
 
 public class TextGenerator : MonoBehaviour
 {
-    [SerializeField] GameObject text;
+    [SerializeField] TMP_Text text;
     [SerializeField] string[] textMsg;
+    [SerializeField] float fxSpeed;
 
     private void OnEnable()
     {
@@ -23,14 +24,37 @@ public class TextGenerator : MonoBehaviour
         StartCoroutine(PrintMsg(textMsg[0],2));
     }
 
+    private void Update()
+    {
+        Debug.Log(Time.timeScale);
+
+        if (Input.GetKey(KeyCode.Space)) fxSpeed = 0.06f;
+        if (Input.GetKeyUp(KeyCode.Space)) fxSpeed = 0.03f;
+    }
+
     public IEnumerator PrintMsg(string msg, float delay)
     {
-        text.SetActive(true);
-        text.GetComponent<TMP_Text>().text = msg;
-        yield return new WaitForSeconds(delay);
-        text.GetComponent<TMP_Text>().text = "";
+        text.gameObject.SetActive(true);
 
-        text.SetActive(false);
+        text.SetText(string.Empty);
+        Time.timeScale = 0;
+
+        for (int i = 0; i < msg.Length; i++)
+        {
+            char character = msg[i];
+            text.SetText(text.text + character);
+
+            yield return new WaitForSecondsRealtime(fxSpeed);
+        }
+
+
+        //text.SetText(msg);
+        Debug.Log("Esperando por pulsar E" + Time.timeScale);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        Debug.Log("He pulsado" + Time.timeScale);
+        Time.timeScale = 1;
+        text.SetText(string.Empty);
+        text.gameObject.SetActive(false);
     }
 
     public void ShowMsg(string msg, float delay)
