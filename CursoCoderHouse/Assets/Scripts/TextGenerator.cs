@@ -8,6 +8,8 @@ public class TextGenerator : MonoBehaviour
     [SerializeField] TMP_Text text;
     [SerializeField] string[] textMsg;
     [SerializeField] float fxSpeed;
+    [SerializeField] float maxSpeed;
+    [SerializeField] float minSpeed;
 
     private void OnEnable()
     {
@@ -28,8 +30,8 @@ public class TextGenerator : MonoBehaviour
     {
         Debug.Log(Time.timeScale);
 
-        if (Input.GetKey(KeyCode.Space)) fxSpeed = 0.06f;
-        if (Input.GetKeyUp(KeyCode.Space)) fxSpeed = 0.03f;
+        if (Input.GetKey(KeyCode.Space)) fxSpeed = maxSpeed;
+        if (Input.GetKeyUp(KeyCode.Space)) fxSpeed = minSpeed;
     }
 
     public IEnumerator PrintMsg(string msg, float delay)
