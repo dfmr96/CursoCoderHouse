@@ -276,6 +276,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 52994853311d2a045ad05a540987eb65, type: 3}
   - {fileID: 8300000, guid: 58767f822b00ae24998f97a62141ae31, type: 3}
   submitClip: {fileID: 8300000, guid: b75bd67fa613bf64eb67b708dcf059de, type: 3}
+  audioSource: {fileID: 0}
 --- !u!82 &3609031008380763585
 AudioSource:
   m_ObjectHideFlags: 0

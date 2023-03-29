@@ -2904,6 +2904,7 @@ GameObject:
   - component: {fileID: 8015507830062454624}
   - component: {fileID: 8015507830062454631}
   - component: {fileID: 5114228704106814451}
+  - component: {fileID: 3529659990587645316}
   - component: {fileID: 161679430}
   - component: {fileID: 7975541640912997057}
   - component: {fileID: 8733165878410261110}
@@ -2997,9 +2998,7 @@ MonoBehaviour:
   angularSpeed: 100
   player: {fileID: 7975541640912997057}
   playerAmmo: 3
-  inventory: {fileID: 161679430}
   allowInteraction: 0
-  flashlightTaken: 0
   interactionObject: {fileID: 2134111972}
   maxDistance: 3
   isRunning: 0
@@ -3007,6 +3006,18 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7312906341477366595, guid: 5905e5b7a9636644b9c8050835c5a0ae, type: 3}
   bulletSpawn: {fileID: 7975166686779486161}
   audioSource: {fileID: 0}
+--- !u!114 &3529659990587645316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239287137530301914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0647a7190442f86469b3444f84d500d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &161679430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3019,6 +3030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b7bd7c77fde3344a38d8bdc472ad78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryPrefab: {fileID: 0}
   flashlight: {fileID: 0}
   flashlightOnPlayer: {fileID: 8411278643466907548}
 --- !u!143 &7975541640912997057
@@ -3809,6 +3821,7 @@ MonoBehaviour:
   batteryDuration: 90
   currentBattery: 0
   lightGO: {fileID: 266561957}
+  inventory: {fileID: 0}
 --- !u!1 &8670137447789485503
 GameObject:
   m_ObjectHideFlags: 0
