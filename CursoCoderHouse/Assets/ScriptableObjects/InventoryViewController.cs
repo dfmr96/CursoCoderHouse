@@ -9,7 +9,10 @@ public class InventoryViewController : MonoBehaviour
     [SerializeField] private GameObject _inventoryViewObject;
     [SerializeField] private GameObject _contextMenuObject;
     [SerializeField] private GameObject _firstContextMenuOption;
+    [SerializeField] private GameObject _firstInventoryOption;
+    [SerializeField] private GameObject[] _firstRowSlots;
     [SerializeField] private GameObject _defaultSlot;
+    [SerializeField] private GameObject _selector;
     [SerializeField] private ItemSlot _selectedSlot;
     [SerializeField] private TMP_Text _itemNameText;
     [SerializeField] private TMP_Text _itemDescriptionText;
@@ -26,6 +29,8 @@ public class InventoryViewController : MonoBehaviour
     [SerializeField] private TMP_Text _promptText;
     [SerializeField] private Button _yesBtn;
     [SerializeField] private Button _noBtn;
+
+    [SerializeField] private float stateCooldown = 0;
 
     public static GameObject lastInteracted;
 
@@ -149,23 +154,71 @@ public class InventoryViewController : MonoBehaviour
             }
 
         }
-        if (Input.GetKeyDown(KeyCode.E) && _state == State.Items)
+        if (_state == State.Items)
         {
-            //if (EventSystem.current.currentSelectedGameObject.TryGetComponent<ItemSlot>(out var slot))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                _state = State.ContextMenu;
-                _contextMenuObject.gameObject.SetActive(true);
-                EventSystem.current.SetSelectedGameObject(_firstContextMenuOption);
+                if (EventSystem.current.currentSelectedGameObject.GetComponent<ItemSlot>().itemData != null)
+                {
+                    _state = State.ContextMenu;
+                    _contextMenuObject.gameObject.SetActive(true);
+                    EventSystem.current.SetSelectedGameObject(_firstContextMenuOption);
+                }
+            }
+
+            if (EventSystem.current.currentSelectedGameObject == _firstRowSlots[0] || EventSystem.current.currentSelectedGameObject == _firstRowSlots[1])
+            {
+                stateCooldown += Time.deltaTime;
+
+                if (Input.GetKeyDown(KeyCode.UpArrow) && stateCooldown > 0.25f)
+                {
+                    stateCooldown = 0;
+                    EventSystem.current.SetSelectedGameObject(_firstInventoryOption);
+                    _selector.SetActive(false);
+                    _state = State.MenuBar;
+                }
+            } else
+            {
+                stateCooldown = 0;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                stateCooldown = 0;
+                EventSystem.current.SetSelectedGameObject(_firstInventoryOption);
+                _selector.SetActive(false);
+                _state = State.MenuBar;
             }
         }
 
         if (_state == State.ContextMenu)
         {
-            if (Input.GetKeyDown(KeyCode.RightArrow) || (Input.GetKeyDown(KeyCode.D)))
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Escape))
             {
                 EventSystem.current.SetSelectedGameObject(_selectedSlot.gameObject);
                 _contextMenuObject.SetActive(false);
                 _state = State.Items;
+            }
+        }
+
+        if (_state == State.MenuBar)
+        {
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                stateCooldown = 0;
+                EventSystem.current.SetSelectedGameObject(_defaultSlot);
+                _selector.SetActive(true);
+                _state = State.Items;
+            }
+
+            stateCooldown += Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.Escape) && stateCooldown > 0.25f)
+            {
+                stateCooldown = 0;
+                _screenFader.FadeToBlack(0.25f, () =>
+                {
+                    EventBus.Instance.CloseInventory();
+                });
             }
         }
     }
@@ -175,6 +228,7 @@ public class InventoryViewController : MonoBehaviour
         _inventoryViewObject.gameObject.SetActive(true);
         _screenFader.FadeFromBlack(0.25f, null);
         EventSystem.current.SetSelectedGameObject(_defaultSlot);
+        _selector.SetActive(true);
         //_state = State.Items;
     }
 

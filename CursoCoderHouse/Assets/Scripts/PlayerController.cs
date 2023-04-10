@@ -19,8 +19,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float angularSpeed;
     [SerializeField] CharacterController player;
     [SerializeField] int playerAmmo;
+    [SerializeField] int weaponDamage;
     [SerializeField] bool allowInteraction;
     [SerializeField] GameObject interactionObject;
+    [SerializeField] GameObject fireOrigin;
+    [SerializeField] int weaponRange;
     [SerializeField] int maxDistance;
     public bool isRunning;
     public bool isAiming;
@@ -62,23 +65,6 @@ public class PlayerController : MonoBehaviour
     }
     private void Movement()
     {
-        if (state == PlayerState.Aiming || state == PlayerState.CheckingInventory) return;
-
-        RotatePlayer();
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
-        {
-            state = PlayerState.Walking;
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                state = PlayerState.Running;
-            }
-        }
-        else
-        {
-            state = PlayerState.Idle;
-        }
-
-
         switch (state)
         {
             case PlayerState.Idle:
@@ -99,13 +85,32 @@ public class PlayerController : MonoBehaviour
                 isRunning = true;
                 break;
             case PlayerState.Aiming:
+                Debug.Log("Puede disparar");
                 isRunning = false;
-                if (Input.GetKeyDown(KeyCode.Space) && playerAmmo > 0) Shoot();
-                return;
+                RotatePlayer();
+                break;
             case PlayerState.CheckingInventory:
                 break;
-
         }
+
+        if (state == PlayerState.Aiming || state == PlayerState.CheckingInventory) return;
+
+        RotatePlayer();
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        {
+            state = PlayerState.Walking;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                state = PlayerState.Running;
+            }
+        }
+        else
+        {
+            state = PlayerState.Idle;
+        }
+
+
+
     }
 
     private void RotatePlayer()
@@ -128,6 +133,18 @@ public class PlayerController : MonoBehaviour
         {
             state = PlayerState.Aiming;
             isAiming = true;
+
+            RaycastHit hit;
+            if (Input.GetKeyDown(KeyCode.Space) && playerAmmo > 0)
+            {
+                Shoot();
+
+                if (Physics.Raycast(fireOrigin.transform.position, transform.forward, out hit, weaponRange))
+                {
+                    DealDamage(hit);
+                }
+            }
+
         }
         else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
@@ -138,12 +155,19 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        if (!isAiming) return;
+        Debug.Log("Disparó");
+        playerAmmo--;
+        audioSource.Play();
+        //if (!isAiming) return;
+    }
 
+    private void DealDamage(RaycastHit hit)
+    {
+        var enemy = hit.collider.gameObject.GetComponent<Enemy>();
+        if (enemy != null)
         {
-            playerAmmo--;
-            audioSource.Play();
-            Instantiate(bulletPrefab, bulletSpawn.transform);
+            Debug.Log("Enemigo Impactado");
+            enemy.TakeDamage(weaponDamage);
         }
     }
 
@@ -171,6 +195,7 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawRay(interactionObject.transform.position, interactionObject.transform.forward);
+        Gizmos.DrawRay(fireOrigin.transform.position, transform.forward * weaponRange);
     }
 }
 

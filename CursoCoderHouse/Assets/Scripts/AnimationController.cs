@@ -20,25 +20,13 @@ public class AnimationController : MonoBehaviour
 
     void CheckRunning()
     {
-        if (player.isRunning)
-        {
-            anim.SetBool("isRunning", true);
-        }
-        else
-        {
-            anim.SetBool("isRunning", false);
-        }
+        anim.SetBool("isRunning", player.isRunning);
     }
 
     void CheckAiming()
     {
-        if (player.isAiming)
-        {
-            anim.SetBool("isAiming", true);
-        }
-        else
-        {
-            anim.SetBool("isAiming", false);
-        }
+        anim.SetBool("isAiming", player.isAiming);
+        anim.SetInteger("WeaponH",1);
     }
+
 }
