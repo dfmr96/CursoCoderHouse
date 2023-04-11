@@ -16387,7 +16387,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17164,8 +17164,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inventoryViewObject: {fileID: 1195553942}
   _contextMenuObject: {fileID: 162049372}
+  _equipBtn: {fileID: 0}
+  _checkBtn: {fileID: 0}
+  _combineBtn: {fileID: 0}
+  _useBtn: {fileID: 0}
   _firstContextMenuOption: {fileID: 239184606}
+  _firstInventoryOption: {fileID: 0}
+  _firstRowSlots: []
   _defaultSlot: {fileID: 551580814}
+  _selector: {fileID: 0}
   _selectedSlot: {fileID: 0}
   _itemNameText: {fileID: 314886724}
   _itemDescriptionText: {fileID: 1917358264}
@@ -17185,6 +17192,10 @@ MonoBehaviour:
   _promptText: {fileID: 33756930}
   _yesBtn: {fileID: 2036070560}
   _noBtn: {fileID: 1890113367}
+  stateCooldown: 0
+  menuContextBtns: []
+  menuContextInteractableBtns: []
+  firstInteractable: {fileID: 0}
   _state: 3
 --- !u!4 &1621965383
 Transform:

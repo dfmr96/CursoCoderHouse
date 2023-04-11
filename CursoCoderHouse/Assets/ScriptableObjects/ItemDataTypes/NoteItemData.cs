@@ -6,5 +6,9 @@ using UnityEngine;
 
 public class NoteItemData : ItemData
 {
-
+    private void Awake()
+    {
+        base._itemType = ItemType.Note;
+        base.SetColor();
+    }
 }

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b01cc8f38907048409b428cd7c070f3c, type: 3}
-  m_Name: HandgunAmmo
+  m_Name: ShotgunAmmo
   m_EditorClassIdentifier: 
-  _name: Handgun Ammo
+  _name: Shotgun Shells
   _description:
-  - Ammunition for 9mm handgun
-  _sprite: {fileID: 6069568990194838836, guid: 08c3fc7dd90a7a249a829a30c4958c8f, type: 3}
+  - Ammunition for 12g Shotgun
+  _sprite: {fileID: 2468989038792749781, guid: de08f51648683fb428663a10159a59ff, type: 3}
   _canUse: 0
   _canEquip: 0
   _canCheck: 1

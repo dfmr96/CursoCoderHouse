@@ -5,7 +5,13 @@ using UnityEngine;
 public class GroundItem : MonoBehaviour, IInteractable
 {
     [SerializeField] private ItemData _itemData;
+    [SerializeField] private ParticleSystem _ps;
     // public InventoryObject inventory;
+
+    private void Start()
+    {
+        SetParticleColor();
+    }
 
     private void OnEnable()
     {
@@ -27,5 +33,11 @@ public class GroundItem : MonoBehaviour, IInteractable
     public void DestroyItem()
     {
         Destroy(gameObject);
+    }
+
+    private void SetParticleColor()
+    {
+        var main = _ps.main;
+        main.startColor = _itemData.itemTypeColor;
     }
 }
