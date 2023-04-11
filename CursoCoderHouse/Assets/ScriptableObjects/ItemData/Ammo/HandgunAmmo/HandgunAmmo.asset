@@ -16,3 +16,7 @@ MonoBehaviour:
   _description:
   - Ammunition for 9mm handgun
   _sprite: {fileID: 6069568990194838836, guid: 08c3fc7dd90a7a249a829a30c4958c8f, type: 3}
+  _canUse: 1
+  _canEquip: 0
+  _canCheck: 1
+  _canCombine: 0

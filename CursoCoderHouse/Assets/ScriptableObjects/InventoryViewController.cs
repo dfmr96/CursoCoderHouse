@@ -8,6 +8,10 @@ public class InventoryViewController : MonoBehaviour
 {
     [SerializeField] private GameObject _inventoryViewObject;
     [SerializeField] private GameObject _contextMenuObject;
+    [SerializeField] private Button _equipBtn;
+    [SerializeField] private Button _checkBtn;
+    [SerializeField] private Button _combineBtn;
+    [SerializeField] private Button _useBtn;
     [SerializeField] private GameObject _firstContextMenuOption;
     [SerializeField] private GameObject _firstInventoryOption;
     [SerializeField] private GameObject[] _firstRowSlots;
@@ -32,7 +36,13 @@ public class InventoryViewController : MonoBehaviour
 
     [SerializeField] private float stateCooldown = 0;
 
+    [SerializeField] private List<Button> menuContextBtns;
+    [SerializeField] private List<Button> menuContextInteractableBtns;
+    [SerializeField] Button firstInteractable;
+
     public static GameObject lastInteracted;
+
+
 
     private enum State
     {
@@ -156,13 +166,28 @@ public class InventoryViewController : MonoBehaviour
         }
         if (_state == State.Items)
         {
+            _selector.SetActive(true);
             if (Input.GetKeyDown(KeyCode.E))
             {
                 if (EventSystem.current.currentSelectedGameObject.GetComponent<ItemSlot>().itemData != null)
                 {
                     _state = State.ContextMenu;
                     _contextMenuObject.gameObject.SetActive(true);
-                    EventSystem.current.SetSelectedGameObject(_firstContextMenuOption);
+                    _selector.SetActive(false);
+                    _equipBtn.interactable = _selectedSlot.itemData.CanBeEquip;
+                    _checkBtn.interactable = _selectedSlot.itemData.CanBeChecked;
+                    _useBtn.interactable = _selectedSlot.itemData.CanBeUsed;
+                    _combineBtn.interactable = _selectedSlot.itemData.CanBeCombined;
+
+                    for (int i = 0; i < menuContextBtns.Count; i++)
+                    {
+                        if (menuContextBtns[i].interactable)
+                        {
+                            menuContextInteractableBtns.Add(menuContextBtns[i]);
+                        }
+                    }
+                    firstInteractable = menuContextInteractableBtns[0];
+                    EventSystem.current.SetSelectedGameObject(firstInteractable.gameObject);
                 }
             }
 
@@ -177,7 +202,8 @@ public class InventoryViewController : MonoBehaviour
                     _selector.SetActive(false);
                     _state = State.MenuBar;
                 }
-            } else
+            }
+            else
             {
                 stateCooldown = 0;
             }
@@ -193,6 +219,32 @@ public class InventoryViewController : MonoBehaviour
 
         if (_state == State.ContextMenu)
         {
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                for (int i = 0; i < menuContextInteractableBtns.Count; i++)
+                {
+                    if (EventSystem.current.currentSelectedGameObject == menuContextInteractableBtns[i].gameObject)
+                    {
+                        Debug.Log("Siguiente Seleccionado");
+                        if (i + 1 < menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(menuContextInteractableBtns[i + 1].gameObject);
+                        if (i + 1 >= menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(menuContextInteractableBtns[0].gameObject);
+                        break;
+                    }
+                    Debug.Log(EventSystem.current.currentSelectedGameObject + "no es el mismo que" + menuContextInteractableBtns[i]);
+                }
+            }
+            if (Input.GetKeyUp(KeyCode.UpArrow))
+            {
+                for (int i = 0; i < menuContextInteractableBtns.Count; i++)
+                {
+                    if (EventSystem.current.currentSelectedGameObject == menuContextInteractableBtns[i].gameObject)
+                    {
+                        if (i - 1 >= 0) EventSystem.current.SetSelectedGameObject(menuContextInteractableBtns[i - 1].gameObject);
+                        if (i - 1 < 0) EventSystem.current.SetSelectedGameObject(menuContextInteractableBtns[menuContextInteractableBtns.Count - 1].gameObject);
+                        break;
+                    }
+                }
+            }
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Escape))
             {
                 EventSystem.current.SetSelectedGameObject(_selectedSlot.gameObject);
