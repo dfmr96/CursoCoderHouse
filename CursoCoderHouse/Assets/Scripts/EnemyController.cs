@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum EnemyState
 {
-    Looking, Moving
+    Idle, Chasing
 }
 public class EnemyController : MonoBehaviour
 {
@@ -14,19 +14,21 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float angularSpeed;
     [SerializeField] float distanceToStop;
+
+    private void Start()
+    {
+        state = EnemyState.Idle;
+    }
     private void Update()
     {
         switch (state)
         {
-            case EnemyState.Looking:
-                RotateEnemy();
+            case EnemyState.Idle:
                 break;
-            case EnemyState.Moving:
+            case EnemyState.Chasing:
+                if (player == null) return;
                 RotateEnemy();
-                if (distanceToStop < CheckDistance())
-                {
-                    MoveEnemy();
-                }
+                MoveEnemy();
                 break;
         }
 
@@ -34,18 +36,31 @@ public class EnemyController : MonoBehaviour
 
     private void RotateEnemy()
     {
-        Quaternion rot = Quaternion.LookRotation((player.transform.position - transform.position));
+        Vector3 faceDir = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
+        Quaternion rot = Quaternion.LookRotation(faceDir, Vector3.up);
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, angularSpeed * Time.deltaTime);
     }
 
     private void MoveEnemy()
     {
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+        Vector3 target = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+        transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
     }
 
     private float CheckDistance()
     {
         float distance = (player.transform.position - transform.position).magnitude;
         return distance;
+    }
+
+    public void SetChasing(GameObject go)
+    {
+        player = go;
+        state = EnemyState.Chasing;
+    }
+
+    public void StopChasing()
+    {
+        state = EnemyState.Idle;
     }
 }

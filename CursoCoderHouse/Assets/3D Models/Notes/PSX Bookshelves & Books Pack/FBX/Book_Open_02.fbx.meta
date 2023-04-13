@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Books.081
-    second: {fileID: 2100000, guid: 120e79b3e2a54e04bbdcd338a49f8323, type: 2}
+    second: {fileID: 2100000, guid: 1926f5e72173ac4449ea648925270ec1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
