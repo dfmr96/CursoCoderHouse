@@ -38,6 +38,7 @@ public class GroundItem : MonoBehaviour, IInteractable
     private void SetParticleColor()
     {
         var main = _ps.main;
-        main.startColor = _itemData.itemTypeColor;
+        main.startColor = _itemData.GetColor();
+        //_ps.main.startColor = Color.white;
     }
 }

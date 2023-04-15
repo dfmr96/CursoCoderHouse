@@ -6,9 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Weapon Item Data", menuName = "Inventory/New Weapon Item Data")]
 public class WeaponItemData : ItemData
 {
-    private void Awake()
+    public WeaponItemData()
     {
-        base._itemType = ItemType.Weapon;
-        base.SetColor();
+        base._itemType = ItemType.weapon;
     }
 }

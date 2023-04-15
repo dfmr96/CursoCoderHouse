@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public enum ItemType
 {
-    Key,
-    Medical,
-    Note,
-    Ammo,
-    Weapon
+    key,
+    medical,
+    note,
+    ammo,
+    weapon
 }
+
 [CreateAssetMenu(fileName = "Default Item Data", menuName = "Inventory/ItemData")]
 public class ItemData : ScriptableObject
 {
@@ -33,31 +33,21 @@ public class ItemData : ScriptableObject
     [SerializeField] protected ItemType _itemType;
     public Color itemTypeColor;
 
-    private Color _keyColor = Color.yellow;
-    private Color _medicalColor = Color.green;
-    private Color _noteColor = Color.white;
-    private Color _weaponColor = Color.red;
-    private Color _ammoColor = Color.blue;
+    private void Awake()
+    {
+        itemTypeColor = GetColor();
+    }
 
-    protected virtual void SetColor()
+    public virtual Color GetColor()
     {
         switch (_itemType)
         {
-            case ItemType.Key:
-                itemTypeColor = _keyColor; 
-                break;
-            case ItemType.Medical:
-                itemTypeColor = _medicalColor;
-                break;
-            case ItemType.Note:
-                itemTypeColor = _noteColor;
-                break;
-            case ItemType.Weapon:
-                itemTypeColor = _weaponColor; 
-                break;
-            case ItemType.Ammo:
-                itemTypeColor = _ammoColor; 
-                break;
+            case ItemType.key: return Color.yellow;
+            case ItemType.medical: return Color.green;
+            case ItemType.note: return Color.white;
+            case ItemType.weapon: return Color.red;
+            case ItemType.ammo: return Color.blue;
+            default: return Color.black;
         }
     }
 }

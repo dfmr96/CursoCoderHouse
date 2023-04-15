@@ -14,9 +14,8 @@ public class NoteItemData : ItemData
     [SerializeField] private string _header;
     [SerializeField] private string[] _pages;
     [SerializeField] private Sprite _background;
-    private void Awake()
+    public NoteItemData()
     {
-        base._itemType = ItemType.Note;
-        base.SetColor();
+        base._itemType = ItemType.note;
     }
 }

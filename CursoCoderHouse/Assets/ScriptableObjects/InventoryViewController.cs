@@ -89,6 +89,7 @@ public class InventoryViewController : MonoBehaviour
         {
             foreach (var slot in _slots)
             {
+
                 if (slot.isEmpty())
                 {
                     slot.itemData = itemData;
@@ -110,7 +111,6 @@ public class InventoryViewController : MonoBehaviour
             EventBus.Instance.CloseInventory();
         }
         ));
-
     }
 
     public void OnSlotSelected(ItemSlot selectedSlot)

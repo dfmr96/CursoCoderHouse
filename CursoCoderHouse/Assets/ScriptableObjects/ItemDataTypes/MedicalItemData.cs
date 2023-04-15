@@ -5,9 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Medical Item Data", menuName = "Inventory/New Medical Item Data")]
 public class MedicalItemData : ItemData
 {
-    private void Awake()
+    public MedicalItemData()
     {
-        base._itemType = ItemType.Medical;
-        base.SetColor();
+        base._itemType = ItemType.medical;
     }
 }
