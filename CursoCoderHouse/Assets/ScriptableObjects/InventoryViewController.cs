@@ -35,6 +35,7 @@ public class InventoryViewController : MonoBehaviour
     [SerializeField] private GameObject _firstInventoryOption;
     [SerializeField] private GameObject[] _firstRowSlots;
     [SerializeField] private GameObject _selector;
+    [SerializeField] private Button _currentWeaponBtn;
 
     [Space(20)]
     [Header("Context Menu")]
@@ -70,17 +71,17 @@ public class InventoryViewController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Instance.onItemPickUp += OnItemPickedUp;
-        EventBus.Instance.onOpenInventory += OpenInventory;
-        EventBus.Instance.onCloseInventory += CloseInventory;
+        EventBus.Instance.OnItemPickUp += OnItemPickedUp;
+        EventBus.Instance.OnOpenInventory += OpenInventory;
+        EventBus.Instance.OnCloseInventory += CloseInventory;
 
     }
 
     private void OnDisable()
     {
-        EventBus.Instance.onItemPickUp -= OnItemPickedUp;
-        EventBus.Instance.onOpenInventory -= OpenInventory;
-        EventBus.Instance.onCloseInventory -= CloseInventory;
+        EventBus.Instance.OnItemPickUp -= OnItemPickedUp;
+        EventBus.Instance.OnOpenInventory -= OpenInventory;
+        EventBus.Instance.OnCloseInventory -= CloseInventory;
     }
 
     private void Update()
@@ -394,4 +395,14 @@ public class InventoryViewController : MonoBehaviour
         _screenFader.FadeFromBlack(0.25f, null);
         _state = InventoryState.MenuClosed;
     }
+
+    public void Equip()
+    {
+        WeaponItemData weaponItemData = (WeaponItemData)_selectedSlot.itemData;
+        EventBus.Instance.EquipWeapon(weaponItemData.id);
+        _currentWeaponBtn.image.sprite = _selectedSlot.itemData.Sprite.sprite;
+        _currentWeaponBtn.image.color = Color.white;
+        HideContextMenu();
+    }
+
 }

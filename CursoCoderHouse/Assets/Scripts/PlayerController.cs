@@ -12,38 +12,46 @@ public enum PlayerState
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Core")]
     [SerializeField] PlayerState state;
+    [SerializeField] CharacterController player;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] bool allowInteraction;
+    [SerializeField] GameObject interactionObject;
+    [SerializeField] int interactMaxDistance;
+    [Space(20)]
+    [Header("Speeds")]
     [SerializeField] float currentSpeed;
     [SerializeField] float speed;
     [SerializeField] float runningSpeed;
     [SerializeField] float angularSpeed;
-    [SerializeField] CharacterController player;
-    [SerializeField] int playerAmmo;
-    [SerializeField] int weaponDamage;
-    [SerializeField] bool allowInteraction;
-    [SerializeField] GameObject interactionObject;
+    [Space(20)]
+    [Header("Weapon")]
     [SerializeField] GameObject fireOrigin;
     [SerializeField] int weaponRange;
-    [SerializeField] int maxDistance;
+    [SerializeField] int playerAmmo;
+    [SerializeField] int weaponDamage;
+    [Space(20)]
+    [Header("Animation Bool")]
     public bool isRunning;
     public bool isAiming;
-
-    [SerializeField] GameObject bulletPrefab;
-    [SerializeField] GameObject bulletSpawn;
-    [SerializeField] AudioSource audioSource;
+    public bool hasWeaponEquipped = false;
 
     private void OnEnable()
     {
-        EventBus.Instance.onOpenInventory += () => state = PlayerState.CheckingInventory;
-        EventBus.Instance.onCloseInventory += () => state = PlayerState.Idle;
-        EventBus.Instance.onItemUsed += Interact;
+        EventBus.Instance.OnOpenInventory += () => state = PlayerState.CheckingInventory;
+        EventBus.Instance.OnCloseInventory += () => state = PlayerState.Idle;
+        EventBus.Instance.OnWeaponEquipped += (int i) => hasWeaponEquipped = true;
+        EventBus.Instance.OnItemUsed += Interact;
     }
 
     private void OnDisable()
     {
-        EventBus.Instance.onOpenInventory -= () => state = PlayerState.CheckingInventory;
-        EventBus.Instance.onCloseInventory -= () => state = PlayerState.Idle;
-        EventBus.Instance.onItemUsed -= Interact;
+        EventBus.Instance.OnOpenInventory -= () => state = PlayerState.CheckingInventory;
+        EventBus.Instance.OnCloseInventory -= () => state = PlayerState.Idle;
+        EventBus.Instance.OnWeaponEquipped -= (i) => hasWeaponEquipped = true;
+
+        EventBus.Instance.OnItemUsed -= Interact;
 
     }
     private void Start()
@@ -56,7 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Time.timeScale == 0) return;
         Movement();
-        Aim();
+        if (hasWeaponEquipped) Aim();
 
         if (Input.GetKeyDown(KeyCode.E) && state != PlayerState.CheckingInventory)
         {
@@ -177,7 +185,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("E apretado");
         RaycastHit hit;
 
-        if (Physics.Raycast(interactionObject.transform.position, interactionObject.transform.forward, out hit, maxDistance))
+        if (Physics.Raycast(interactionObject.transform.position, interactionObject.transform.forward, out hit, interactMaxDistance))
         {
             Debug.Log("Ha golpeado" + hit.transform.name + hit.collider);
             Debug.DrawRay(interactionObject.transform.position, interactionObject.transform.forward, Color.red, 0.5f);
@@ -186,15 +194,15 @@ public class PlayerController : MonoBehaviour
             if (allowInteraction)
             {
                 interactable.Interact(item);
-                allowInteraction = false;
             }
             //state = PlayerState.Idle;
         }
+        allowInteraction = false;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawRay(interactionObject.transform.position, interactionObject.transform.forward);
+        Gizmos.DrawRay(interactionObject.transform.position, interactionObject.transform.forward * interactMaxDistance);
         Gizmos.DrawRay(fireOrigin.transform.position, transform.forward * weaponRange);
     }
 }

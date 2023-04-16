@@ -6,18 +6,12 @@ public class EventBus : MonoBehaviour
 {
     public static EventBus Instance { get; private set; }
 
-    public event Action onOpenInventory;
-    public event Action onCloseInventory;
-    public event Action onGameplayResumed;
-    public event Action onGameplayPaused;
-    public event Action<ItemData> onItemUsed;
-    
-    public event Action<ItemData> onItemPickUp;
-    public event Action onItemPicked;
-    public event Action<ItemData, Action, Action> onPickUpPrompt;
-
+    public event Action OnOpenInventory;
+    public event Action OnCloseInventory;
+    public event Action<ItemData> OnItemUsed;
+    public event Action<ItemData> OnItemPickUp;
+    public event Action<int> OnWeaponEquipped;
     public UnityEvent onDoorClosed;
-
 
     private void Awake()
     {
@@ -33,38 +27,22 @@ public class EventBus : MonoBehaviour
 
     public void OpenInventory()
     {
-        onOpenInventory?.Invoke();
+        OnOpenInventory?.Invoke();
     }
 
     public void CloseInventory()
     {
-        onCloseInventory?.Invoke();
-    }
-
-    public void GameplayResume()
-    {
-        onGameplayResumed?.Invoke();
-    }
-
-    public void GameplayPause()
-    { 
-        onGameplayPaused?.Invoke(); 
-    }
-
-    public void PickUpItem(ItemData item)
-    {
-        onItemPickUp?.Invoke(item);
-    }
-
-    public void ItemPicked()
-    {
-        onItemPicked?.Invoke();
+        OnCloseInventory?.Invoke();
     }
 
     public void UseItem(ItemData item)
     {
-        onItemUsed?.Invoke(item);
+        OnItemUsed?.Invoke(item);
         Debug.Log("Evento accionado con" + item.Name);
+    }
+    public void PickUpItem(ItemData item)
+    {
+        OnItemPickUp?.Invoke(item);
     }
 
     public void DoorLocked()
@@ -73,10 +51,8 @@ public class EventBus : MonoBehaviour
         Debug.Log("Puerta Cerrada");
     }
 
-    public void PickUpPrompt(ItemData item, Action yesAction, Action noAction)
+    public void EquipWeapon(int weaponId)
     {
-        onOpenInventory?.Invoke();
-        onPickUpPrompt?.Invoke(item, yesAction, noAction);
-        Debug.Log("PickUpPromt llamado");
+        OnWeaponEquipped?.Invoke(weaponId);
     }
 }

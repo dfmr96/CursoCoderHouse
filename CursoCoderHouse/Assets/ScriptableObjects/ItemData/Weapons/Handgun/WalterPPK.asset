@@ -15,4 +15,11 @@ MonoBehaviour:
   _name: Walther PPK
   _description:
   - It's a low caliber handgun. I could use it for emergencies
-  _sprite: {fileID: 0}
+  _sprite: {fileID: 6069568990194838836, guid: 23071c1eb7e4fa94c94c3774aa663b8d, type: 3}
+  _canUse: 0
+  _canEquip: 1
+  _canCheck: 0
+  _canCombine: 0
+  _itemType: 4
+  itemTypeColor: {r: 1, g: 0, b: 0, a: 1}
+  id: 0
