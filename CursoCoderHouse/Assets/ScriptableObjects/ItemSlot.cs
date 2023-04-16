@@ -7,6 +7,8 @@ public class ItemSlot : MonoBehaviour, ISelectHandler
     public ItemData itemData;
     private InventoryViewController _viewController;
     private Image _spawnedSprite;
+    public int stack;
+    public int maxStack;
 
     public void OnSelect(BaseEventData eventData)
     {
@@ -21,7 +23,11 @@ public class ItemSlot : MonoBehaviour, ISelectHandler
     private void OnEnable()
     {
         _viewController = FindObjectOfType<InventoryViewController>();
-        if (itemData == null) return;
+        //if (itemData == null) return;
+    }
+
+    public void DrawSprite()
+    {
         _spawnedSprite = Instantiate<Image>(itemData.Sprite, transform.position, Quaternion.identity, transform);
     }
 

@@ -67,8 +67,6 @@ public class InventoryViewController : MonoBehaviour
         EventBus.Instance.onOpenInventory += OpenInventory;
         EventBus.Instance.onCloseInventory += CloseInventory;
 
-        _itemNameText.SetText(_selectedSlot.itemData.Name);
-        _itemDescriptionText.SetText(_selectedSlot.itemData.Descripton[0]);
     }
 
     private void OnDisable()
@@ -278,10 +276,55 @@ public class InventoryViewController : MonoBehaviour
     public void OpenInventory()
     {
         _inventoryViewObject.gameObject.SetActive(true);
+        ReOrderSlots();
         _screenFader.FadeFromBlack(0.25f, null);
+        SetTextByFirstSlot();
         EventSystem.current.SetSelectedGameObject(_defaultSlot);
         _selector.SetActive(true);
         //_state = State.Items;
+    }
+
+    private void SetTextByFirstSlot()
+    {
+        if (_slots[0].itemData != null)
+        {
+            _itemNameText.SetText(_slots[0].itemData.Name);
+            _itemDescriptionText.SetText(_slots[0].itemData.Descripton[0]);
+        }
+        else
+        {
+            _itemNameText.SetText(string.Empty);
+            _itemDescriptionText.SetText(string.Empty);
+        }
+    }
+
+    private void ReOrderSlots()
+    {
+        for (int i = 0; i < _slots.Count; i++)
+        {
+            Debug.Log("Chequeando slot" + i + 1);
+            if (_slots[i].itemData != null)
+            {
+                _slots[i].DrawSprite();
+                continue;
+            }
+            Debug.Log("Slot" + i + 1 + "es vacio");
+            if (i + 1 < _slots.Count)
+            {
+                for (int j = i + 1; j < _slots.Count; j++)
+                {
+                    if (_slots[j].itemData != null)
+                    {
+                        _slots[i].itemData = _slots[j].itemData;
+                        _slots[i].stack = _slots[j].stack;
+                        _slots[i].DrawSprite();
+                        _slots[j].itemData = null;
+                        break;
+                    }
+                }
+
+            }
+        }
     }
 
     public void CloseInventory()
