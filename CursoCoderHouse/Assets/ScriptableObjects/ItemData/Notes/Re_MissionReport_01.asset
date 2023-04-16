@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13025ec789dad7b45856ab6d941b4a1b, type: 3}
-  m_Name: OldNote
+  m_Name: Re_MissionReport_01
   m_EditorClassIdentifier: 
-  _name: Nota sucia
-  _description: []
+  _name: '[Re] Report de la Mision #1'
+  _description:
+  - Es un documento confidencial
   _sprite: {fileID: 0}
   _canUse: 0
   _canEquip: 0
@@ -21,6 +22,8 @@ MonoBehaviour:
   _canCombine: 0
   _itemType: 2
   itemTypeColor: {r: 1, g: 1, b: 1, a: 1}
-  _header: Nota sucia
-  _textField: 
-  _background: {fileID: 21300000, guid: 183d69bc53c00d04ab49b6fbff33b7a3, type: 3}
+  _header: '[Re] Reporte de la Mision #1'
+  _textField: "Para: Andrew\r\n\r\nHaz lo que creas necesario hacer. En cuanto a
+    la cantidad, sea la que sea. Todo sea por el bien de la empresa.\r\n\r\n\nCordialmente,
+    Sr.Mend\xE9z\r"
+  _background: {fileID: 21300000, guid: 33ea1d9c122d06e478ea7f6f0a9f8fff, type: 3}

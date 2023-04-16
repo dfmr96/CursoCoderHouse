@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13025ec789dad7b45856ab6d941b4a1b, type: 3}
+  m_Name: MissionReport_01
+  m_EditorClassIdentifier: 
+  _name: Report de la Mision #1
+  _description:
+  - Es un documento confidencial
+  _sprite: {fileID: 0}
+  _canUse: 0
+  _canEquip: 0
+  _canCheck: 0
+  _canCombine: 0
+  _itemType: 2
+  itemTypeColor: {r: 1, g: 1, b: 1, a: 1}
+  _header: Reporte de la Mision #1
+  _textField: "[Confidencial]\r\n\nPara: Sr. Mend\xE9z.\r\n\nHe estado siguiendo
+    a mi cu\xF1ada, o mejor dicho, su hija. Cada vez esta m\xE1s cerca de descubrir
+    el secreto de la empresa, deber\xEDamos hacer \u201Calgo\u201D antes de que sea
+    demasiado  tarde. Dada la situaci\xF3n moral en la que me encontrar\xEDa al \u201Cresolver
+    el problema\u201D, debo exigir una cantidad mas jugosa a cambio.\r\n\r\n\nAtentamente,
+    Andrew."
+  _background: {fileID: 21300000, guid: 33ea1d9c122d06e478ea7f6f0a9f8fff, type: 3}

@@ -8,11 +8,11 @@ using UnityEngine.UI;
 public class NoteItemData : ItemData
 {
     public string Header => _header;
-    public string[] Pages => _pages;
+    public string Pages => _textField;
     public Sprite Background => _background;
 
-    [SerializeField] private string _header;
-    [SerializeField] private string[] _pages;
+    public string _header;
+    [Multiline(5)] public string _textField;
     [SerializeField] private Sprite _background;
     public NoteItemData()
     {

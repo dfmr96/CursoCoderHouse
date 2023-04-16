@@ -20,7 +20,7 @@ public class Note : MonoBehaviour, IInteractable
         Time.timeScale = 0f;
         _noteViewer.SetActive(true);
         _header.SetText(_itemData.Header);
-        _pageField.SetText(_itemData.Pages[0]);
+        _pageField.SetText(_itemData.Pages);
         _background.sprite = _itemData.Background;
     }
 }

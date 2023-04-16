@@ -4,56 +4,59 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+public enum State
+{
+    Items,
+    ContextMenu,
+    ItemPickUpPrompt,
+    NoteViewer,
+    MenuBar,
+    MenuClosed
+}
+
 public class InventoryViewController : MonoBehaviour
 {
+    [Header("Core")]
+    public static GameObject lastInteracted;
+    [SerializeField] private State _state;
+    [SerializeField] private PlayerController _playerController;
     [SerializeField] private GameObject _inventoryViewObject;
+    [SerializeField] private ScreenFader _screenFader;
+    [SerializeField] private float stateCooldown = 0;
+
+    [Space(20)]
+    [Header("Inventory Slots")]
+    [SerializeField] private GameObject _defaultSlot;
+    [SerializeField] private ItemSlot _selectedSlot;
+    [SerializeField] private List<ItemSlot> _slots;
+    [SerializeField] private GameObject _firstInventoryOption;
+    [SerializeField] private GameObject[] _firstRowSlots;
+    [SerializeField] private GameObject _selector;
+
+    [Space(20)]
+    [Header("Context Menu")]
     [SerializeField] private GameObject _contextMenuObject;
+    [SerializeField] private Button _firstInteractable;
+    [SerializeField] private GameObject _firstContextMenuOption;
+    [SerializeField] private List<Button> _menuContextBtns;
+    [SerializeField] private List<Button> _menuContextInteractableBtns;
+    [SerializeField] private List<GameObject> _contextMenuIgnore;
     [SerializeField] private Button _equipBtn;
     [SerializeField] private Button _checkBtn;
     [SerializeField] private Button _combineBtn;
     [SerializeField] private Button _useBtn;
-    [SerializeField] private GameObject _firstContextMenuOption;
-    [SerializeField] private GameObject _firstInventoryOption;
-    [SerializeField] private GameObject[] _firstRowSlots;
-    [SerializeField] private GameObject _defaultSlot;
-    [SerializeField] private GameObject _selector;
-    [SerializeField] private ItemSlot _selectedSlot;
-    [SerializeField] private TMP_Text _itemNameText;
-    [SerializeField] private TMP_Text _itemDescriptionText;
 
-    [SerializeField] private PlayerController _playerController;
-
-    [SerializeField] private List<ItemSlot> _slots;
-
-    [SerializeField] private ScreenFader _screenFader;
-
-    [SerializeField] private List<GameObject> _contextMenuIgnore;
-
+    [Space(20)]
+    [Header("PickUp Prompt")]
     [SerializeField] private GameObject _promptPanel;
     [SerializeField] private TMP_Text _promptText;
     [SerializeField] private Button _yesBtn;
     [SerializeField] private Button _noBtn;
 
-    [SerializeField] private float stateCooldown = 0;
-
-    [SerializeField] private List<Button> menuContextBtns;
-    [SerializeField] private List<Button> menuContextInteractableBtns;
-    [SerializeField] Button firstInteractable;
-
-    public static GameObject lastInteracted;
-
-
-
-    private enum State
-    {
-        Items,
-        ContextMenu,
-        ItemPickUpPrompt,
-        MenuBar,
-        MenuClosed
-    }
-
-    [SerializeField] private State _state;
+    [Space(20)]
+    [Header("Item Description")]
+    [SerializeField] private TMP_Text _itemNameText;
+    [SerializeField] private TMP_Text _itemDescriptionText;
 
     private void Awake()
     {
@@ -177,15 +180,15 @@ public class InventoryViewController : MonoBehaviour
                     _useBtn.interactable = _selectedSlot.itemData.CanBeUsed;
                     _combineBtn.interactable = _selectedSlot.itemData.CanBeCombined;
 
-                    for (int i = 0; i < menuContextBtns.Count; i++)
+                    for (int i = 0; i < _menuContextBtns.Count; i++)
                     {
-                        if (menuContextBtns[i].interactable)
+                        if (_menuContextBtns[i].interactable)
                         {
-                            menuContextInteractableBtns.Add(menuContextBtns[i]);
+                            _menuContextInteractableBtns.Add(_menuContextBtns[i]);
                         }
                     }
-                    firstInteractable = menuContextInteractableBtns[0];
-                    EventSystem.current.SetSelectedGameObject(firstInteractable.gameObject);
+                    _firstInteractable = _menuContextInteractableBtns[0];
+                    EventSystem.current.SetSelectedGameObject(_firstInteractable.gameObject);
                 }
             }
 
@@ -219,32 +222,33 @@ public class InventoryViewController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                for (int i = 0; i < menuContextInteractableBtns.Count; i++)
+                for (int i = 0; i < _menuContextInteractableBtns.Count; i++)
                 {
-                    if (EventSystem.current.currentSelectedGameObject == menuContextInteractableBtns[i].gameObject)
+                    if (EventSystem.current.currentSelectedGameObject == _menuContextInteractableBtns[i].gameObject)
                     {
                         Debug.Log("Siguiente Seleccionado");
-                        if (i + 1 < menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(menuContextInteractableBtns[i + 1].gameObject);
-                        if (i + 1 >= menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(menuContextInteractableBtns[0].gameObject);
+                        if (i + 1 < _menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[i + 1].gameObject);
+                        if (i + 1 >= _menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[0].gameObject);
                         break;
                     }
-                    Debug.Log(EventSystem.current.currentSelectedGameObject + "no es el mismo que" + menuContextInteractableBtns[i]);
+                    Debug.Log(EventSystem.current.currentSelectedGameObject + "no es el mismo que" + _menuContextInteractableBtns[i]);
                 }
             }
             if (Input.GetKeyUp(KeyCode.UpArrow))
             {
-                for (int i = 0; i < menuContextInteractableBtns.Count; i++)
+                for (int i = 0; i < _menuContextInteractableBtns.Count; i++)
                 {
-                    if (EventSystem.current.currentSelectedGameObject == menuContextInteractableBtns[i].gameObject)
+                    if (EventSystem.current.currentSelectedGameObject == _menuContextInteractableBtns[i].gameObject)
                     {
-                        if (i - 1 >= 0) EventSystem.current.SetSelectedGameObject(menuContextInteractableBtns[i - 1].gameObject);
-                        if (i - 1 < 0) EventSystem.current.SetSelectedGameObject(menuContextInteractableBtns[menuContextInteractableBtns.Count - 1].gameObject);
+                        if (i - 1 >= 0) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[i - 1].gameObject);
+                        if (i - 1 < 0) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[_menuContextInteractableBtns.Count - 1].gameObject);
                         break;
                     }
                 }
             }
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Escape))
             {
+                _menuContextInteractableBtns.Clear();
                 EventSystem.current.SetSelectedGameObject(_selectedSlot.gameObject);
                 _contextMenuObject.SetActive(false);
                 _state = State.Items;
