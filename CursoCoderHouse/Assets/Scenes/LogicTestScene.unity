@@ -14057,6 +14057,7 @@ MonoBehaviour:
   _playerController: {fileID: 161679435}
   _inventoryViewObject: {fileID: 1195553942}
   _screenFader: {fileID: 1917250701}
+  _noteViewer: {fileID: 273814900}
   stateCooldown: 0
   _defaultSlot: {fileID: 551580814}
   _selectedSlot: {fileID: 0}
@@ -18879,6 +18880,10 @@ PrefabInstance:
       propertyPath: _noteViewer
       value: 
       objectReference: {fileID: 273814900}
+    - target: {fileID: 764024177116042387, guid: e2e475733c051f94dbbfcf78551e526d, type: 3}
+      propertyPath: _inventoryViewController
+      value: 
+      objectReference: {fileID: 1621965382}
     - target: {fileID: 941501419795690362, guid: e2e475733c051f94dbbfcf78551e526d, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -19057,6 +19062,10 @@ PrefabInstance:
       propertyPath: _noteViewer
       value: 
       objectReference: {fileID: 273814900}
+    - target: {fileID: 7247246857762465424, guid: 56f44b65592b9d4428319424bb715db5, type: 3}
+      propertyPath: _inventoryViewController
+      value: 
+      objectReference: {fileID: 1621965382}
     - target: {fileID: 7517085363009117123, guid: 56f44b65592b9d4428319424bb715db5, type: 3}
       propertyPath: m_Name
       value: MissionReport#2
@@ -19094,6 +19103,10 @@ PrefabInstance:
       propertyPath: _noteViewer
       value: 
       objectReference: {fileID: 273814900}
+    - target: {fileID: 5817457011380559350, guid: 41063a6a9df55434d94fe23f5bef6ce8, type: 3}
+      propertyPath: _inventoryViewController
+      value: 
+      objectReference: {fileID: 1621965382}
     - target: {fileID: 6282938371682400799, guid: 41063a6a9df55434d94fe23f5bef6ce8, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -19175,6 +19188,10 @@ PrefabInstance:
       propertyPath: _noteViewer
       value: 
       objectReference: {fileID: 273814900}
+    - target: {fileID: 8218859247226983728, guid: 27cdbd71bd0659641ae0a063a6866355, type: 3}
+      propertyPath: _inventoryViewController
+      value: 
+      objectReference: {fileID: 1621965382}
     - target: {fileID: 8468449062073103065, guid: 27cdbd71bd0659641ae0a063a6866355, type: 3}
       propertyPath: m_RootOrder
       value: 1

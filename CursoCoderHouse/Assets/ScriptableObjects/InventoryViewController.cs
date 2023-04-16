@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum State
+public enum InventoryState
 {
     Items,
     ContextMenu,
@@ -18,10 +19,12 @@ public class InventoryViewController : MonoBehaviour
 {
     [Header("Core")]
     public static GameObject lastInteracted;
-    [SerializeField] private State _state;
+    [SerializeField] private GameObject lastInteractedDebug;
+    [SerializeField] private InventoryState _state;
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private GameObject _inventoryViewObject;
     [SerializeField] private ScreenFader _screenFader;
+    [SerializeField] private GameObject _noteViewer;
     [SerializeField] private float stateCooldown = 0;
 
     [Space(20)]
@@ -58,9 +61,10 @@ public class InventoryViewController : MonoBehaviour
     [SerializeField] private TMP_Text _itemNameText;
     [SerializeField] private TMP_Text _itemDescriptionText;
 
+
     private void Awake()
     {
-        _state = State.MenuClosed;
+        _state = InventoryState.MenuClosed;
         EventSystem.current.SetSelectedGameObject(_defaultSlot);
     }
 
@@ -79,11 +83,92 @@ public class InventoryViewController : MonoBehaviour
         EventBus.Instance.onCloseInventory -= CloseInventory;
     }
 
+    private void Update()
+    {
+        lastInteractedDebug = lastInteracted;
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            ToggleInventory();
+        }
+        switch (_state)
+        {
+            case InventoryState.Items:
+                _selector.SetActive(true);
+                CheckIfCanNavegateToMenuBar();
+                if (Input.GetKeyDown(KeyCode.E)) ShowContextMenu();
+                if (Input.GetKeyDown(KeyCode.Escape)) GoToMenuBar();
+                break;
+
+            case InventoryState.ContextMenu:
+                NavegateVertical();
+                if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Escape)) HideContextMenu();
+                break;
+
+            case InventoryState.ItemPickUpPrompt:
+                break;
+
+            case InventoryState.NoteViewer:
+                if (Input.GetKeyDown(KeyCode.Escape)) CloseNoteViewer();
+                Destroy(lastInteracted);
+                break;
+
+            case InventoryState.MenuBar:
+                stateCooldown += Time.deltaTime;
+                if (Input.GetKeyDown(KeyCode.DownArrow)) GoToItems();
+                if (Input.GetKeyDown(KeyCode.Escape) && stateCooldown > 0.25f) ExitFromMenuBar();
+                break;
+
+            case InventoryState.MenuClosed:
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void SetState(InventoryState state)
+    {
+        _state = state;
+    }
+
+    private void CloseNoteViewer()
+    {
+        _noteViewer.SetActive(false);
+        if (_inventoryViewObject.activeInHierarchy)
+        {
+            _state = InventoryState.MenuBar;
+        }
+        else
+        {
+            _state = InventoryState.MenuClosed;
+        }
+        Time.timeScale = 1;
+    }
+
+    private void ToggleInventory()
+    {
+        if (_state == InventoryState.MenuClosed)
+        {
+            _screenFader.FadeToBlack(0.25f, () =>
+            {
+                EventBus.Instance.OpenInventory();
+                _state = InventoryState.Items;
+            });
+        }
+        else if (_state == InventoryState.Items)
+        {
+            _screenFader.FadeToBlack(0.25f, () =>
+            {
+                EventBus.Instance.CloseInventory();
+            });
+        }
+    }
+
     private void OnItemPickedUp(ItemData itemData)
     {
         EventBus.Instance.OpenInventory();
         _promptPanel.SetActive(true);
-        _state = State.ItemPickUpPrompt;
+        _state = InventoryState.ItemPickUpPrompt;
         EventSystem.current.SetSelectedGameObject(_yesBtn.gameObject);
         _promptText.SetText($"Do you want to take {itemData.Name}?");
         _yesBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
@@ -140,140 +225,113 @@ public class InventoryViewController : MonoBehaviour
         //EventBus.Instance.UseItem(_selectedSlot.itemData);
         _screenFader.FadeFromBlack(1f, () => EventBus.Instance.UseItem(_selectedSlot.itemData));
         EventBus.Instance.CloseInventory();
-        _state = State.MenuClosed;
+        _state = InventoryState.MenuClosed;
     }
 
-    private void Update()
+    private void ExitFromMenuBar()
     {
-        if (Input.GetKeyUp(KeyCode.Tab))
+        stateCooldown = 0;
+        _screenFader.FadeToBlack(0.25f, () =>
         {
+            EventBus.Instance.CloseInventory();
+        });
+    }
 
-            if (_state == State.MenuClosed)
-            {
-                _screenFader.FadeToBlack(0.25f, () =>
-                {
-                    EventBus.Instance.OpenInventory();
-                    _state = State.Items;
-                });
-            }
-            else if (_state == State.Items)
-            {
-                _screenFader.FadeToBlack(0.25f, () =>
-                {
-                    EventBus.Instance.CloseInventory();
-                });
-            }
+    private void GoToItems()
+    {
+        stateCooldown = 0;
+        EventSystem.current.SetSelectedGameObject(_defaultSlot);
+        _selector.SetActive(true);
+        _state = InventoryState.Items;
+    }
 
+    private void HideContextMenu()
+    {
+        _menuContextInteractableBtns.Clear();
+        EventSystem.current.SetSelectedGameObject(_selectedSlot.gameObject);
+        _contextMenuObject.SetActive(false);
+        _state = InventoryState.Items;
+    }
+
+    private void NavegateVertical()
+    {
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            for (int i = 0; i < _menuContextInteractableBtns.Count; i++)
+            {
+                if (EventSystem.current.currentSelectedGameObject == _menuContextInteractableBtns[i].gameObject)
+                {
+                    Debug.Log("Siguiente Seleccionado");
+                    if (i + 1 < _menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[i + 1].gameObject);
+                    if (i + 1 >= _menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[0].gameObject);
+                    break;
+                }
+                Debug.Log(EventSystem.current.currentSelectedGameObject + "no es el mismo que" + _menuContextInteractableBtns[i]);
+            }
         }
-        if (_state == State.Items)
+        if (Input.GetKeyUp(KeyCode.UpArrow))
         {
-            _selector.SetActive(true);
-            if (Input.GetKeyDown(KeyCode.E))
+            for (int i = 0; i < _menuContextInteractableBtns.Count; i++)
             {
-                if (EventSystem.current.currentSelectedGameObject.GetComponent<ItemSlot>().itemData != null)
+                if (EventSystem.current.currentSelectedGameObject == _menuContextInteractableBtns[i].gameObject)
                 {
-                    _state = State.ContextMenu;
-                    _contextMenuObject.gameObject.SetActive(true);
-                    _selector.SetActive(false);
-                    _equipBtn.interactable = _selectedSlot.itemData.CanBeEquip;
-                    _checkBtn.interactable = _selectedSlot.itemData.CanBeChecked;
-                    _useBtn.interactable = _selectedSlot.itemData.CanBeUsed;
-                    _combineBtn.interactable = _selectedSlot.itemData.CanBeCombined;
-
-                    for (int i = 0; i < _menuContextBtns.Count; i++)
-                    {
-                        if (_menuContextBtns[i].interactable)
-                        {
-                            _menuContextInteractableBtns.Add(_menuContextBtns[i]);
-                        }
-                    }
-                    _firstInteractable = _menuContextInteractableBtns[0];
-                    EventSystem.current.SetSelectedGameObject(_firstInteractable.gameObject);
+                    if (i - 1 >= 0) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[i - 1].gameObject);
+                    if (i - 1 < 0) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[_menuContextInteractableBtns.Count - 1].gameObject);
+                    break;
                 }
             }
+        }
+    }
 
-            if (EventSystem.current.currentSelectedGameObject == _firstRowSlots[0] || EventSystem.current.currentSelectedGameObject == _firstRowSlots[1])
-            {
-                stateCooldown += Time.deltaTime;
+    private void GoToMenuBar()
+    {
+        stateCooldown = 0;
+        EventSystem.current.SetSelectedGameObject(_firstInventoryOption);
+        _selector.SetActive(false);
+        _state = InventoryState.MenuBar;
+    }
 
-                if (Input.GetKeyDown(KeyCode.UpArrow) && stateCooldown > 0.25f)
-                {
-                    stateCooldown = 0;
-                    EventSystem.current.SetSelectedGameObject(_firstInventoryOption);
-                    _selector.SetActive(false);
-                    _state = State.MenuBar;
-                }
-            }
-            else
-            {
-                stateCooldown = 0;
-            }
+    private void CheckIfCanNavegateToMenuBar()
+    {
+        if (EventSystem.current.currentSelectedGameObject == _firstRowSlots[0] || EventSystem.current.currentSelectedGameObject == _firstRowSlots[1])
+        {
+            stateCooldown += Time.deltaTime;
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.UpArrow) && stateCooldown > 0.25f)
             {
                 stateCooldown = 0;
                 EventSystem.current.SetSelectedGameObject(_firstInventoryOption);
                 _selector.SetActive(false);
-                _state = State.MenuBar;
+                _state = InventoryState.MenuBar;
             }
         }
-
-        if (_state == State.ContextMenu)
+        else
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                for (int i = 0; i < _menuContextInteractableBtns.Count; i++)
-                {
-                    if (EventSystem.current.currentSelectedGameObject == _menuContextInteractableBtns[i].gameObject)
-                    {
-                        Debug.Log("Siguiente Seleccionado");
-                        if (i + 1 < _menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[i + 1].gameObject);
-                        if (i + 1 >= _menuContextInteractableBtns.Count) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[0].gameObject);
-                        break;
-                    }
-                    Debug.Log(EventSystem.current.currentSelectedGameObject + "no es el mismo que" + _menuContextInteractableBtns[i]);
-                }
-            }
-            if (Input.GetKeyUp(KeyCode.UpArrow))
-            {
-                for (int i = 0; i < _menuContextInteractableBtns.Count; i++)
-                {
-                    if (EventSystem.current.currentSelectedGameObject == _menuContextInteractableBtns[i].gameObject)
-                    {
-                        if (i - 1 >= 0) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[i - 1].gameObject);
-                        if (i - 1 < 0) EventSystem.current.SetSelectedGameObject(_menuContextInteractableBtns[_menuContextInteractableBtns.Count - 1].gameObject);
-                        break;
-                    }
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Escape))
-            {
-                _menuContextInteractableBtns.Clear();
-                EventSystem.current.SetSelectedGameObject(_selectedSlot.gameObject);
-                _contextMenuObject.SetActive(false);
-                _state = State.Items;
-            }
+            stateCooldown = 0;
         }
+    }
 
-        if (_state == State.MenuBar)
+    private void ShowContextMenu()
+    {
+        if (EventSystem.current.currentSelectedGameObject.GetComponent<ItemSlot>().itemData != null)
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                stateCooldown = 0;
-                EventSystem.current.SetSelectedGameObject(_defaultSlot);
-                _selector.SetActive(true);
-                _state = State.Items;
-            }
+            _state = InventoryState.ContextMenu;
+            _contextMenuObject.gameObject.SetActive(true);
+            _selector.SetActive(false);
+            _equipBtn.interactable = _selectedSlot.itemData.CanBeEquip;
+            _checkBtn.interactable = _selectedSlot.itemData.CanBeChecked;
+            _useBtn.interactable = _selectedSlot.itemData.CanBeUsed;
+            _combineBtn.interactable = _selectedSlot.itemData.CanBeCombined;
 
-            stateCooldown += Time.deltaTime;
-            if (Input.GetKeyDown(KeyCode.Escape) && stateCooldown > 0.25f)
+            for (int i = 0; i < _menuContextBtns.Count; i++)
             {
-                stateCooldown = 0;
-                _screenFader.FadeToBlack(0.25f, () =>
+                if (_menuContextBtns[i].interactable)
                 {
-                    EventBus.Instance.CloseInventory();
-                });
+                    _menuContextInteractableBtns.Add(_menuContextBtns[i]);
+                }
             }
+            _firstInteractable = _menuContextInteractableBtns[0];
+            EventSystem.current.SetSelectedGameObject(_firstInteractable.gameObject);
         }
     }
 
@@ -326,7 +384,6 @@ public class InventoryViewController : MonoBehaviour
                         break;
                     }
                 }
-
             }
         }
     }
@@ -335,6 +392,6 @@ public class InventoryViewController : MonoBehaviour
     {
         _inventoryViewObject.gameObject.SetActive(false);
         _screenFader.FadeFromBlack(0.25f, null);
-        _state = State.MenuClosed;
+        _state = InventoryState.MenuClosed;
     }
 }
