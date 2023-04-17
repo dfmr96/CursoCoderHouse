@@ -1,11 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponsPool : MonoBehaviour
 {
+    public static WeaponsPool instance;
     [SerializeField] GameObject[] weapons;
-    [SerializeField] GameObject currentWeapon;
+    public GameObject currentWeapon;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(instance);
+        }
+    }
 
     private void OnEnable()
     {
@@ -17,6 +28,11 @@ public class WeaponsPool : MonoBehaviour
         EventBus.Instance.OnWeaponEquipped -= EquipWeapon;
     }
 
+    public Vector3 GetWeaponOrigin()
+    {
+        return currentWeapon.GetComponent<Weapon>().bulletOrigin.position;
+    }
+
     public void EquipWeapon(int weaponId)
     {
         foreach (GameObject weapon in weapons)
@@ -24,5 +40,6 @@ public class WeaponsPool : MonoBehaviour
             weapon.SetActive(false);
         }
         weapons[weaponId].SetActive(true);
+        currentWeapon = weapons[weaponId];
     }
 }

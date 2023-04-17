@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0)
         {
+            if (AutoAim.instance != null) AutoAim.instance.RemoveFromList(gameObject);
             Destroy(gameObject);
         }
     }

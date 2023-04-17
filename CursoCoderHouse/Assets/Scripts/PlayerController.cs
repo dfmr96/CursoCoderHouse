@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum PlayerState
@@ -15,10 +16,15 @@ public class PlayerController : MonoBehaviour
     [Header("Core")]
     [SerializeField] PlayerState state;
     [SerializeField] CharacterController player;
+    [SerializeField] GameObject autoAim;
     [SerializeField] AudioSource audioSource;
     [SerializeField] bool allowInteraction;
     [SerializeField] GameObject interactionObject;
     [SerializeField] int interactMaxDistance;
+    [SerializeField] List<GameObject> nearestEnemies = null;
+    [SerializeField] GameObject nearestEnemy;
+
+
     [Space(20)]
     [Header("Speeds")]
     [SerializeField] float currentSpeed;
@@ -142,6 +148,8 @@ public class PlayerController : MonoBehaviour
             state = PlayerState.Aiming;
             isAiming = true;
 
+            autoAim.GetComponent<AutoAim>().AimToNearestEnemy(transform);
+
             RaycastHit hit;
             if (Input.GetKeyDown(KeyCode.Space) && playerAmmo > 0)
             {
@@ -203,7 +211,11 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawRay(interactionObject.transform.position, interactionObject.transform.forward * interactMaxDistance);
-        Gizmos.DrawRay(fireOrigin.transform.position, transform.forward * weaponRange);
+
+        if (WeaponsPool.instance != null && WeaponsPool.instance.currentWeapon != null)
+        {
+        Gizmos.DrawRay(WeaponsPool.instance.GetWeaponOrigin(), transform.forward * weaponRange);
+        }
     }
 }
 
