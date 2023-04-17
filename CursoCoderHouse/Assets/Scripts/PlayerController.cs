@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
             autoAim.GetComponent<AutoAim>().AimToNearestEnemy(transform);
 
             RaycastHit hit;
-            if (Input.GetKeyDown(KeyCode.Space) && playerAmmo > 0)
+            if (Input.GetKeyDown(KeyCode.Space) && CurrentWeapon.Instance.stack > 0)
             {
                 Shoot();
 
@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
     private void Shoot()
     {
         Debug.Log("Disparó");
-        playerAmmo--;
+        CurrentWeapon.Instance.stack--;
         audioSource.Play();
         //if (!isAiming) return;
     }

@@ -7,6 +7,7 @@ using UnityEngine;
 public class WeaponItemData : ItemData
 {
     public int id = 0;
+    public int maxAmmo = 0;
     public WeaponItemData()
     {
         base._itemType = ItemType.weapon;

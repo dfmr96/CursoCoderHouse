@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -36,6 +35,7 @@ public class InventoryViewController : MonoBehaviour
     [SerializeField] private GameObject[] _firstRowSlots;
     [SerializeField] private GameObject _selector;
     [SerializeField] private Button _currentWeaponBtn;
+    [SerializeField] private TMP_Text _currentWeaponAmmoText;
 
     [Space(20)]
     [Header("Context Menu")]
@@ -180,6 +180,7 @@ public class InventoryViewController : MonoBehaviour
                 if (slot.isEmpty())
                 {
                     slot.itemData = itemData;
+                    slot.stack = itemData.stack;
                     break;
                 }
             }
@@ -369,26 +370,38 @@ public class InventoryViewController : MonoBehaviour
             if (_slots[i].itemData != null)
             {
                 _slots[i].DrawSprite();
-                continue;
-            }
-            Debug.Log("Slot" + i + 1 + "es vacio");
-            if (i + 1 < _slots.Count)
-            {
-                for (int j = i + 1; j < _slots.Count; j++)
+                _slots[i].maxStack = _slots[i].itemData.stack;
+                if (CurrentWeapon.Instance.weaponItemData != null)
                 {
-                    if (_slots[j].itemData != null)
+                    if (_slots[i].itemData is WeaponItemData)
                     {
-                        _slots[i].itemData = _slots[j].itemData;
-                        _slots[i].stack = _slots[j].stack;
-                        _slots[i].DrawSprite();
-                        _slots[j].itemData = null;
-                        break;
+                        WeaponItemData weaponItemData = (WeaponItemData)_slots[i].itemData;
+                        if (weaponItemData == CurrentWeapon.Instance.weaponItemData)
+                        {
+                            _slots[i].stack = CurrentWeapon.Instance.stack;
+                            _slots[i].stackText.SetText(_slots[i].stack.ToString());
+                        }
+                    }
+                    continue;
+                }
+                Debug.Log("Slot" + i + 1 + "es vacio");
+                if (i + 1 < _slots.Count)
+                {
+                    for (int j = i + 1; j < _slots.Count; j++)
+                    {
+                        if (_slots[j].itemData != null)
+                        {
+                            _slots[i].itemData = _slots[j].itemData;
+                            _slots[i].stack = _slots[j].stack;
+                            _slots[i].DrawSprite();
+                            _slots[j].itemData = null;
+                            break;
+                        }
                     }
                 }
             }
         }
     }
-
     public void CloseInventory()
     {
         _inventoryViewObject.gameObject.SetActive(false);
@@ -400,9 +413,19 @@ public class InventoryViewController : MonoBehaviour
     {
         WeaponItemData weaponItemData = (WeaponItemData)_selectedSlot.itemData;
         EventBus.Instance.EquipWeapon(weaponItemData.id);
-        _currentWeaponBtn.image.sprite = _selectedSlot.itemData.Sprite.sprite;
-        _currentWeaponBtn.image.color = Color.white;
+        SetCurrentWeapon(weaponItemData);
         HideContextMenu();
+    }
+
+    public void SetCurrentWeapon(WeaponItemData weaponItemData)
+    {
+        CurrentWeapon.Instance.weaponItemData = weaponItemData;
+        CurrentWeapon.Instance.maxStack = weaponItemData.maxAmmo;
+        CurrentWeapon.Instance.weaponBtn.image.sprite = _selectedSlot.itemData.Sprite.sprite;
+        CurrentWeapon.Instance.stack = _selectedSlot.stack;
+        CurrentWeapon.Instance.stackText.SetText(CurrentWeapon.Instance.stack.ToString());
+        CurrentWeapon.Instance.stackText.color = Color.green;
+        CurrentWeapon.Instance.weaponBtn.image.color = Color.white;
     }
 
 }

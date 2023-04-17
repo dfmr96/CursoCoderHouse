@@ -22,4 +22,6 @@ MonoBehaviour:
   _canCombine: 0
   _itemType: 4
   itemTypeColor: {r: 1, g: 0, b: 0, a: 1}
+  stack: 10
   id: 0
+  maxAmmo: 10

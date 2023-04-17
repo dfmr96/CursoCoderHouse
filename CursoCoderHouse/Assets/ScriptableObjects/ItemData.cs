@@ -32,6 +32,7 @@ public class ItemData : ScriptableObject
     [SerializeField] private bool _canCombine;
     [SerializeField] protected ItemType _itemType;
     public Color itemTypeColor;
+    public int stack;
 
     private void Awake()
     {

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ public class ItemSlot : MonoBehaviour, ISelectHandler
     private Image _spawnedSprite;
     public int stack;
     public int maxStack;
+    public TMP_Text stackText;
 
     public void OnSelect(BaseEventData eventData)
     {
@@ -28,6 +30,10 @@ public class ItemSlot : MonoBehaviour, ISelectHandler
 
     public void DrawSprite()
     {
+        stackText.SetText(stack.ToString());
+        stackText.color = itemData.GetColor();
+
+        if (itemData.GetColor() == Color.red) stackText.color = Color.green;
         _spawnedSprite = Instantiate<Image>(itemData.Sprite, transform.position, Quaternion.identity, transform);
     }
 
