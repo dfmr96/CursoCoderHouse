@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum PlayerState
@@ -21,8 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool allowInteraction;
     [SerializeField] GameObject interactionObject;
     [SerializeField] int interactMaxDistance;
-    [SerializeField] List<GameObject> nearestEnemies = null;
-    [SerializeField] GameObject nearestEnemy;
+    [SerializeField] InventoryViewController _inventoryViewController;
 
 
     [Space(20)]
@@ -71,10 +69,11 @@ public class PlayerController : MonoBehaviour
         if (Time.timeScale == 0) return;
         Movement();
         if (hasWeaponEquipped) Aim();
-
-        if (Input.GetKeyDown(KeyCode.E) && state != PlayerState.CheckingInventory)
+        if (Input.GetKeyDown(KeyCode.E) && state != PlayerState.CheckingInventory) Interact(null);
+        if (Input.GetKeyDown(KeyCode.R) && CurrentWeapon.Instance.stack < CurrentWeapon.Instance.maxStack)
         {
-            Interact(null);
+            Reload();
+            AudioManager.sharedInstance.reloadWeaponSound.Play();
         }
     }
     private void Movement()
@@ -151,16 +150,19 @@ public class PlayerController : MonoBehaviour
             autoAim.GetComponent<AutoAim>().AimToNearestEnemy(transform);
 
             RaycastHit hit;
-            if (Input.GetKeyDown(KeyCode.Space) && CurrentWeapon.Instance.stack > 0)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                Shoot();
-
-                if (Physics.Raycast(fireOrigin.transform.position, transform.forward, out hit, weaponRange))
+                if (CurrentWeapon.Instance.stack > 0)
                 {
-                    DealDamage(hit);
+                    Shoot();
                 }
+                else
+                {
+                    AudioManager.sharedInstance.dryWeaponSound.Play();
+                    return;
+                }
+                if (Physics.Raycast(fireOrigin.transform.position, transform.forward, out hit, weaponRange)) DealDamage(hit);
             }
-
         }
         else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
@@ -208,13 +210,18 @@ public class PlayerController : MonoBehaviour
         allowInteraction = false;
     }
 
+    public void Reload()
+    {
+        _inventoryViewController.GetAmmo();
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawRay(interactionObject.transform.position, interactionObject.transform.forward * interactMaxDistance);
 
         if (WeaponsPool.instance != null && WeaponsPool.instance.currentWeapon != null)
         {
-        Gizmos.DrawRay(WeaponsPool.instance.GetWeaponOrigin(), transform.forward * weaponRange);
+            Gizmos.DrawRay(WeaponsPool.instance.GetWeaponOrigin(), transform.forward * weaponRange);
         }
     }
 }

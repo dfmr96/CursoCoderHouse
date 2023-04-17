@@ -11,6 +11,8 @@ public class AudioManager : MonoBehaviour
     public AudioSource retreteSound;
     public AudioSource clickSound;
     public AudioSource doorLockedSound;
+    public AudioSource dryWeaponSound;
+    public AudioSource reloadWeaponSound;
     // Start is called before the first frame update
     private void OnEnable()
     {

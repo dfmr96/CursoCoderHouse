@@ -428,4 +428,30 @@ public class InventoryViewController : MonoBehaviour
         CurrentWeapon.Instance.weaponBtn.image.color = Color.white;
     }
 
+    public void GetAmmo()
+    {
+        for (int i = 0; i < _slots.Count; i++)
+        {
+            if (_slots[i].itemData is AmmoItemData)
+            {
+                AmmoItemData ammoItemData = _slots[i].itemData as AmmoItemData;
+
+                if (ammoItemData.weaponData == CurrentWeapon.Instance.weaponItemData)
+                {
+                    int ammoLeft = CurrentWeapon.Instance.maxStack - CurrentWeapon.Instance.stack;
+                    if (_slots[i].stack >= (ammoLeft))
+                    {
+                        _slots[i].stack -= ammoLeft;
+                        CurrentWeapon.Instance.stack = CurrentWeapon.Instance.maxStack;
+                    }
+                    else
+                    {
+                        CurrentWeapon.Instance.stack += _slots[i].stack;
+                        _slots[i].stack = 0;
+                        _slots[i].itemData = null;
+                    }
+                }
+            }
+        }
+    }
 }
