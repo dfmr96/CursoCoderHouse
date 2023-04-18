@@ -30,8 +30,8 @@ public class TextGenerator : MonoBehaviour
     {
         Debug.Log(Time.timeScale);
 
-        if (Input.GetKey(KeyCode.Space)) fxSpeed = maxSpeed;
-        if (Input.GetKeyUp(KeyCode.Space)) fxSpeed = minSpeed;
+        if (Input.GetKey(KeyCode.C)) fxSpeed = maxSpeed;
+        if (Input.GetKeyUp(KeyCode.C)) fxSpeed = minSpeed;
     }
 
     public IEnumerator PrintMsg(string msg, float delay)
@@ -52,7 +52,7 @@ public class TextGenerator : MonoBehaviour
 
         //text.SetText(msg);
         Debug.Log("Esperando por pulsar E" + Time.timeScale);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.C));
         Debug.Log("He pulsado" + Time.timeScale);
         Time.timeScale = 1;
         text.SetText(string.Empty);

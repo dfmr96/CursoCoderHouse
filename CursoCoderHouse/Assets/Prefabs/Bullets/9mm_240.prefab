@@ -130,8 +130,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 20, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 3, y: 27.992912, z: 3}
+  m_Center: {x: 0, y: 3.996436, z: 0}
 --- !u!114 &8084321558121670478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,6 +161,10 @@ PrefabInstance:
       propertyPath: ShapeModule.m_MeshRenderer
       value: 
       objectReference: {fileID: 7366023863218387045}
+    - target: {fileID: 2775427019480318116, guid: 8703f245fa18b2d4fb18fd4ae914b28b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 3457041475357996524, guid: 8703f245fa18b2d4fb18fd4ae914b28b, type: 3}
       propertyPath: m_RootOrder
       value: 1

@@ -25,6 +25,7 @@ public class InventoryViewController : MonoBehaviour
     [SerializeField] private ScreenFader _screenFader;
     [SerializeField] private GameObject _noteViewer;
     [SerializeField] private float stateCooldown = 0;
+    [SerializeField] private Image _itemViewer;
 
     [Space(20)]
     [Header("Inventory Slots")]
@@ -87,7 +88,7 @@ public class InventoryViewController : MonoBehaviour
     private void Update()
     {
         lastInteractedDebug = lastInteracted;
-        if (Input.GetKeyUp(KeyCode.Tab))
+        if (Input.GetKeyUp(KeyCode.Z))
         {
             ToggleInventory();
         }
@@ -96,27 +97,27 @@ public class InventoryViewController : MonoBehaviour
             case InventoryState.Items:
                 _selector.SetActive(true);
                 CheckIfCanNavegateToMenuBar();
-                if (Input.GetKeyDown(KeyCode.E)) ShowContextMenu();
-                if (Input.GetKeyDown(KeyCode.Escape)) GoToMenuBar();
+                if (Input.GetKeyDown(KeyCode.C)) ShowContextMenu();
+                if (Input.GetKeyDown(KeyCode.V)) GoToMenuBar();
                 break;
 
             case InventoryState.ContextMenu:
                 NavegateVertical();
-                if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Escape)) HideContextMenu();
+                if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.V)) HideContextMenu();
                 break;
 
             case InventoryState.ItemPickUpPrompt:
                 break;
 
             case InventoryState.NoteViewer:
-                if (Input.GetKeyDown(KeyCode.Escape)) CloseNoteViewer();
+                if (Input.GetKeyDown(KeyCode.V)) CloseNoteViewer();
                 Destroy(lastInteracted);
                 break;
 
             case InventoryState.MenuBar:
                 stateCooldown += Time.deltaTime;
                 if (Input.GetKeyDown(KeyCode.DownArrow)) GoToItems();
-                if (Input.GetKeyDown(KeyCode.Escape) && stateCooldown > 0.25f) ExitFromMenuBar();
+                if (Input.GetKeyDown(KeyCode.V) && stateCooldown > 0.25f) ExitFromMenuBar();
                 break;
 
             case InventoryState.MenuClosed:
@@ -170,6 +171,8 @@ public class InventoryViewController : MonoBehaviour
         EventBus.Instance.OpenInventory();
         _promptPanel.SetActive(true);
         _state = InventoryState.ItemPickUpPrompt;
+        _itemViewer.color = Color.white;
+        _itemViewer.sprite = itemData.Sprite.sprite;
         EventSystem.current.SetSelectedGameObject(_yesBtn.gameObject);
         _promptText.SetText($"Do you want to take {itemData.Name}?");
         _yesBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
@@ -184,6 +187,7 @@ public class InventoryViewController : MonoBehaviour
                     break;
                 }
             }
+            _itemViewer.sprite = null;
             _yesBtn.onClick.RemoveAllListeners();
             _noBtn.onClick.RemoveAllListeners();
             _promptPanel.SetActive(false);
@@ -193,6 +197,7 @@ public class InventoryViewController : MonoBehaviour
         ));
         _noBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
         {
+            _itemViewer.sprite = null;
             _promptPanel.SetActive(false);
             _yesBtn.onClick.RemoveAllListeners();
             _noBtn.onClick.RemoveAllListeners();
@@ -203,19 +208,26 @@ public class InventoryViewController : MonoBehaviour
 
     public void OnSlotSelected(ItemSlot selectedSlot)
     {
+        AudioManager.sharedInstance.slotsSound.Play();
         if (selectedSlot.itemData == null)
         {
             _itemNameText.ClearMesh();
             _itemDescriptionText.ClearMesh();
+            _itemViewer.sprite = null;
+            _itemViewer.color = new Color(0, 0, 0, 0);
             return;
         }
+
         _selectedSlot = selectedSlot;
         _itemNameText.SetText(selectedSlot.itemData.Name);
         _itemDescriptionText.SetText(selectedSlot.itemData.Descripton[0]);
+        _itemViewer.color = Color.white;
+        _itemViewer.sprite = selectedSlot.itemData.Sprite.sprite;
     }
 
     public void UseItem()
     {
+        AudioManager.sharedInstance.submitContextMenuSound.Play();
         _screenFader.FadeToBlack(1f, FadeToUseItemCallback);
         Debug.Log("Data pasada al evento con " + _selectedSlot.itemData.Name);
     }
@@ -259,6 +271,7 @@ public class InventoryViewController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            AudioManager.sharedInstance.slotsSound.Play();
             for (int i = 0; i < _menuContextInteractableBtns.Count; i++)
             {
                 if (EventSystem.current.currentSelectedGameObject == _menuContextInteractableBtns[i].gameObject)
@@ -273,6 +286,7 @@ public class InventoryViewController : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.UpArrow))
         {
+            AudioManager.sharedInstance.slotsSound.Play();
             for (int i = 0; i < _menuContextInteractableBtns.Count; i++)
             {
                 if (EventSystem.current.currentSelectedGameObject == _menuContextInteractableBtns[i].gameObject)
@@ -315,6 +329,7 @@ public class InventoryViewController : MonoBehaviour
 
     private void ShowContextMenu()
     {
+        AudioManager.sharedInstance.openContextMenuSound.Play();
         if (EventSystem.current.currentSelectedGameObject.GetComponent<ItemSlot>().itemData != null)
         {
             _state = InventoryState.ContextMenu;
@@ -384,7 +399,9 @@ public class InventoryViewController : MonoBehaviour
                     }
                     continue;
                 }
-                Debug.Log("Slot" + i + 1 + "es vacio");
+            }
+            else 
+            {
                 if (i + 1 < _slots.Count)
                 {
                     for (int j = i + 1; j < _slots.Count; j++)
@@ -411,6 +428,7 @@ public class InventoryViewController : MonoBehaviour
 
     public void Equip()
     {
+        AudioManager.sharedInstance.submitContextMenuSound.Play();
         WeaponItemData weaponItemData = (WeaponItemData)_selectedSlot.itemData;
         EventBus.Instance.EquipWeapon(weaponItemData.id);
         SetCurrentWeapon(weaponItemData);

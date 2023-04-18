@@ -18,6 +18,7 @@ public class Note : MonoBehaviour, IInteractable
 
     public void Interact(ItemData item)
     {
+        AudioManager.sharedInstance.noteSound.Play();
         Time.timeScale = 0f;
         _noteViewer.SetActive(true);
         _inventoryViewController.SetState(InventoryState.NoteViewer);

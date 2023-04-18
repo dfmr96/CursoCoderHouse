@@ -13,6 +13,10 @@ public class AudioManager : MonoBehaviour
     public AudioSource doorLockedSound;
     public AudioSource dryWeaponSound;
     public AudioSource reloadWeaponSound;
+    public AudioSource slotsSound;
+    public AudioSource openContextMenuSound;
+    public AudioSource submitContextMenuSound;
+    public AudioSource noteSound;
     // Start is called before the first frame update
     private void OnEnable()
     {

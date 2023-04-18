@@ -34,6 +34,7 @@ public class ItemSlot : MonoBehaviour, ISelectHandler
         stackText.color = itemData.GetColor();
 
         if (itemData.GetColor() == Color.red) stackText.color = Color.green;
+        if (itemData is KeyItemData) stackText.SetText(string.Empty);
         _spawnedSprite = Instantiate<Image>(itemData.Sprite, transform.position, Quaternion.identity, transform);
     }
 

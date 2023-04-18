@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec61c70f055e923438a1a38b834b40d7, type: 3}
+  m_Name: HexagonKey
+  m_EditorClassIdentifier: 
+  _name: Hexagon Key
+  _description:
+  - An old key with a Hexagon Shape
+  _sprite: {fileID: 5963540035983846723, guid: 6a5a20daa008bd74792eaae585d7d688, type: 3}
+  _canUse: 1
+  _canEquip: 0
+  _canCheck: 0
+  _canCombine: 0
+  _itemType: 0
+  itemTypeColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  stack: 0

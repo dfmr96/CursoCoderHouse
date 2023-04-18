@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8363357247783728167}
+  - component: {fileID: 8363357247783728160}
   - component: {fileID: 8363357247783728166}
   - component: {fileID: 8363357247783728165}
   - component: {fileID: 235476319863337199}
   - component: {fileID: 1374266158581616365}
   - component: {fileID: 9142729355236490305}
-  - component: {fileID: 8363357247783728160}
   - component: {fileID: 1397027130}
   - component: {fileID: 1397027137}
   - component: {fileID: 1397027144}
@@ -42,6 +42,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8363357247783728160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8363357247783728164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4da92d417be9846abbb1064b30337d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletImpact: {fileID: 8363357247783728165}
+  stepSound: {fileID: 8363357247783728166}
+  doorSound: {fileID: 235476319863337199}
+  retreteSound: {fileID: 9142729355236490305}
+  clickSound: {fileID: 1374266158581616365}
+  doorLockedSound: {fileID: 1397027137}
+  dryWeaponSound: {fileID: 6595382717008108700}
+  reloadWeaponSound: {fileID: 3916398774268004691}
 --- !u!82 &8363357247783728166
 AudioSource:
   m_ObjectHideFlags: 0
@@ -522,26 +542,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8363357247783728160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8363357247783728164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d4da92d417be9846abbb1064b30337d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletImpact: {fileID: 8363357247783728165}
-  stepSound: {fileID: 8363357247783728166}
-  doorSound: {fileID: 235476319863337199}
-  retreteSound: {fileID: 9142729355236490305}
-  clickSound: {fileID: 1374266158581616365}
-  doorLockedSound: {fileID: 1397027137}
-  dryWeaponSound: {fileID: 6595382717008108700}
-  reloadWeaponSound: {fileID: 3916398774268004691}
 --- !u!82 &1397027130
 AudioSource:
   m_ObjectHideFlags: 0

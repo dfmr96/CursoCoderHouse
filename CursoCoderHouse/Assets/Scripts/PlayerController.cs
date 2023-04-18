@@ -69,8 +69,8 @@ public class PlayerController : MonoBehaviour
         if (Time.timeScale == 0) return;
         Movement();
         if (hasWeaponEquipped) Aim();
-        if (Input.GetKeyDown(KeyCode.E) && state != PlayerState.CheckingInventory) Interact(null);
-        if (Input.GetKeyDown(KeyCode.R) && CurrentWeapon.Instance.stack < CurrentWeapon.Instance.maxStack)
+        if (Input.GetKeyDown(KeyCode.C) && state != PlayerState.CheckingInventory) Interact(null);
+        if (Input.GetKeyDown(KeyCode.V) && CurrentWeapon.Instance.stack < CurrentWeapon.Instance.maxStack)
         {
             Reload();
             AudioManager.sharedInstance.reloadWeaponSound.Play();
@@ -86,8 +86,8 @@ public class PlayerController : MonoBehaviour
                 break;
             case PlayerState.Walking:
                 if (!AudioManager.sharedInstance.stepSound.isPlaying) AudioManager.sharedInstance.stepSound.Play();
-                if (Input.GetKey(KeyCode.W)) currentSpeed = speed;
-                if (Input.GetKey(KeyCode.S)) currentSpeed = -speed;
+                if (Input.GetKey(KeyCode.UpArrow)) currentSpeed = speed;
+                if (Input.GetKey(KeyCode.DownArrow)) currentSpeed = -speed;
                 player.Move(transform.forward * currentSpeed * Time.deltaTime);
                 isRunning = true;
                 break;
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         if (state == PlayerState.Aiming || state == PlayerState.CheckingInventory) return;
 
         RotatePlayer();
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow))
         {
             state = PlayerState.Walking;
             if (Input.GetKey(KeyCode.LeftShift))
@@ -129,11 +129,11 @@ public class PlayerController : MonoBehaviour
     private void RotatePlayer()
     {
         Vector3 rotateVector = new Vector3(0, 1, 0);
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             transform.Rotate(-rotateVector * angularSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             transform.Rotate(rotateVector * angularSpeed * Time.deltaTime);
         }
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
     private void Aim()
     {
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.X))
         {
             state = PlayerState.Aiming;
             isAiming = true;
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
             autoAim.GetComponent<AutoAim>().AimToNearestEnemy(transform);
 
             RaycastHit hit;
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 if (CurrentWeapon.Instance.stack > 0)
                 {
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
                 if (Physics.Raycast(fireOrigin.transform.position, transform.forward, out hit, weaponRange)) DealDamage(hit);
             }
         }
-        else if (Input.GetKeyUp(KeyCode.LeftControl))
+        else if (Input.GetKeyUp(KeyCode.X))
         {
             state = PlayerState.Idle;
             isAiming = false;
